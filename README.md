@@ -27,10 +27,6 @@ How to use the same for a flexible amount of items
 {{ scms_collection('mycustomimageidentifier','image') }}
 ```
 
-Screenshots
------------
-![SimpleCMS1](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple1.png "First")
-
 
 
 Advanced examples
@@ -47,8 +43,6 @@ Flexible amount of wysiwyg text elements
 ``` twig
 {{ scms_collection('mycustomidentifier','text',{'html':true}) }}
 ```
-
-Screenshots : ...
 
 
 Install & setup the bundle
@@ -194,6 +188,17 @@ Add / Edit types of Content:
 
 Your YYYContent Entity have to implement `Ibrows\SimpleCMSBundle\Entity\ContentInterface` or extend `Ibrows\SimpleCMSBundle\Entity\Content` or a Child of it.
 It's also a good idea to extend `Ibrows\SimpleCMSBundle\ContentType` in your FormType.
+
+
+
+Screenshots
+-----------
+![SimpleCMS1](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple1.png "Simple CMS")
+
+![SimpleCMS2](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple2.png "Simple CMS")
+
+![SimpleCMS3](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple3.png "Simple CMS")
+
 
 
 TODO
