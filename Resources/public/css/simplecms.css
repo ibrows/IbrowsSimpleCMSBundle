@@ -110,9 +110,10 @@ form.simplecms-editform textarea{
 }
 
 
-.simplecms-jquery-dialog .ui-button-text{
+.simplecms-jquery-dialog .ui-dialog-buttonpane button{
     background:  url(images/save.png);
     background-position: left;
     background-repeat: no-repeat;
-    padding-left: 30px;
+    padding: 5px   5px 5px 30px;
+    color: white;
 }

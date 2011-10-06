@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      * 
-     * @Assert\File(maxSize="600")
+     * @Assert\File(maxSize="6000000000")
      */
     protected $file;    
     
