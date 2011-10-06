@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      * 
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="600")
      */
     protected $file;    
     
@@ -57,6 +57,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     }
 
     public function setFile($file) {
+        //remove old file
         if($this->getPath()){
             if(file_exists($this->getPath())){
                 unlink($this->getAbsolutePath());
@@ -102,7 +103,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     {
         
         if (null !== $this->file) {            
-            $this->setPath($this->getUploadDir().'/'.$this->name. time().'.'. $this->file->guessExtension());
+            $name = preg_replace('/([^a-z0-9\-\_])/i', '', $this->getName());
+            $this->setPath($this->getUploadDir().'/'.$name. time().'.'. $this->file->guessExtension());
             
         }
     }
@@ -114,11 +116,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function upload()
     {
         
-
         if (null === $this->file) {
             return;
         }
-        //@todo kill the old
         $filename = str_replace(dirname($this->getAbsolutePath()), '', $this->getAbsolutePath());
         $this->file->move($this->getUploadRootDir(), $filename); 
 
@@ -138,14 +138,24 @@ use Symfony\Component\Validator\Constraints as Assert;
   
     
     //return html
-    public function toHTML(\Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter,array $args){
-        
-        $return ='';
-        $arr = parent::mergeUserArgs($args, array('attr'=>array('class'=>'simplecms-imagecontent','alt'=>$this->getName(),'title'=>$this->getName())));
+    public function toHTML(\Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter,array $args){        
+        $return ='';        
+        $name = $filter->filterHtml($this->getName());
+        $config = array('attr'=>array('class'=>'simplecms-imagecontent','alt'=>$name,'title'=>$name));
+        $mimetpye = \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser::getInstance()->guess($this->getWebPath() );        
+        if(strpos($mimetpye, 'image')!==0){
+            //if not a image
+            $config = array('attr'=>array('class'=>'simplecms-downloadcontent','title'=>$name));
+        }               
+        $arr = parent::mergeUserArgs($args, $config);
         foreach($arr['attr'] as $key => $val){
             $return .= "$key=\"$val\"";
         }
         
+        if(strpos($mimetpye, 'image')!==0){
+            //if not a image
+            return '<a href="/'.$this->getWebPath().'" '.$return.' ">'.$name.' </a>';
+        }            
         $return = '<img src="/'.$this->getWebPath().'" '.$return.' ">';
         return $return;
             ;

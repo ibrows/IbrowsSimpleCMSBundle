@@ -189,8 +189,12 @@ class ContentController extends Controller
                 return $this->render('IbrowsSimpleCMSBundle:Content:editedByKey.html.twig', array('groupkey'=>$groupkey,'key' => $entity->getKeyWord(),'type'=>$type, 'args' => unserialize($this->getRequest()->get('args')),'default' => $this->getRequest()->get('default')));
             }
             return $this->redirect($this->generateUrl('ibrows_simple_cms_content_edit', array('id' => $id,'type'=>$type)));
-        }else if ($this->get('request')->isXmlHttpRequest() || $this->get('request')->get('_xml_http_request')) {            
-                throw new \Symfony\Component\Form\Exception\NotValidException (print_r($editForm->getErrors(),true));
+        }else if ($this->get('request')->isXmlHttpRequest() || $this->get('request')->get('_xml_http_request')) {    
+                $errors = $editForm->getErrors();
+                foreach( $editForm->getChildren() as $key => $child){
+                    $errors[] = $child->getErrors();
+                }
+                return $this->render("IbrowsSimpleCMSBundle:Order:address.html.twig", array_merge($arr, $statusarr));
                 
         }
         $deleteForm = $this->createDeleteForm($id,$type);
