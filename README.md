@@ -27,12 +27,14 @@ How to use the same for a flexible amount of items
 {{ scms_collection('mycustomimageidentifier','image') }}
 ```
 
-Screenshots : ...
+Screenshots
+-----------
+![SimpleCMS1](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple1.png "First")
 
 
 
 Advanced examples
--------------
+-----------------
 
 Single image with `my` class and inline editorstyle (instead of block)
 
