@@ -129,6 +129,9 @@ Install & setup the bundle
     php app/console doctrine:schema:update  --force
 
     ```
+6.  Permissions
+
+    Get permissions for FileUpload, default folder is web-dir `uploads/documents` 
 
 
 Minimal configuration
@@ -145,7 +148,7 @@ Additional configuration
 
         ibrows_simple_cms:
           include_js_libs: true
-          upload_dir: 'web/uploads/documents'
+          upload_dir: 'uploads/documents'
           role: ROLE_IS_AUTHENTICATED_ANONYMOUSLY
 
 
