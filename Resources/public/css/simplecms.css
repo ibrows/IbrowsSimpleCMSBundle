@@ -37,19 +37,27 @@ div.simplecms-edit.active a.simplecms-deletelink, div.simplecms-edit.active a.si
     position: absolute;  
     width: 24px;
     height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    min-width: 24px;
+    min-height: 24px;    
     top: -12px;
     background: black;    
+    background-repeat: no-repeat;
     filter:alpha(opacity=90);
     opacity: 0.9;
     -moz-opacity:0.9;    
     z-index: 999;
+    
 }
 div.simplecms-edit.active a.simplecms-deletelink{
     background: url(images/delete.png);
+    background-repeat: no-repeat;
     left: 0px;
 }
 div.simplecms-edit.active a.simplecms-editlink{
     background: url(images/edit.gif);
+    background-repeat: no-repeat;
     left: 26px;
 }
 div.simplecms-edit.active a.simplecms-addlink{
@@ -77,23 +85,23 @@ div.simplecms-edit-collection div.simplecms-edit.active{
 
 
 form.simplecms-editform{
-    min-width: 500px;    
+    min-width: 600px;    
     min-height:100px;    
 }
 form.simplecms-editform label{
-    min-width: 150px;
+    min-width: 200px;
     display: block;
     float: left;
     text-align: left;
 }
 form.simplecms-editform input{
-    min-width: 300px;
+    min-width: 400px;
     display: block;
     float: right;    
     text-align: left;
 }
 form.simplecms-editform textarea{
-    min-width: 300px;
+    min-width: 600px;
     min-height: 100px;
     display: block;
     float: right;    
