@@ -86,7 +86,7 @@ div.simplecms-edit-collection div.simplecms-edit.active{
 
 form.simplecms-editform{
     min-width: 600px;    
-    min-height:100px;    
+    min-height:400px;    
 }
 form.simplecms-editform label{
     min-width: 200px;
