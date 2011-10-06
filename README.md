@@ -1,7 +1,6 @@
 IbrowsSimpleCMSBundle - Simple CMS for anyone anywhere
 ========================================================
 
-some blah !
 
 Quick example
 -------------
