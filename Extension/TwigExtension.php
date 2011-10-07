@@ -100,11 +100,11 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             $editpath .="?args=" . urlencode(serialize($arguments));
             $editpath .="&default=" . $default;
             $outadd = '<a href="' . $editpath . '" class="simplecms-editlink simplecms-addlink" > </a> ADD '.$default.'';
-            $outadd = "<div class=\"simplecms-edit simplecms-add $class\" id=\"simplcms-$addkey-$type\" >$outadd</div>";               
+            $outadd = "<div class=\"simplcms-$addkey-$type simplecms-edit simplecms-add $class\" id=\"simplcms-$addkey-$type\" >$outadd</div>";               
         }
     
 
-        return "<div class=\"simplecms-edit-collection $class\" id=\"simplcms-collection-$key-$type\" >$out$outadd</div>"; 
+        return "<div class=\"simplcms-collection-$key-$type simplecms-edit-collection $class\" id=\"simplcms-collection-$key-$type\" >$out$outadd</div>"; 
     }
     
     private function wrapOutputForEdit($out,$key, $type, array $arguments = array(), $default=''){
@@ -118,7 +118,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         $editpath .="&default=" . $default;        
         $out = '<a href="' . $editpath . '" class="simplecms-editlink" ></a>' . $out;
         $out = '<a href="' . $this->env->getExtension('routing')->getPath('ibrows_simple_cms_content_delete_key', array('key' => $key, 'type' => $type)) . '" class="simplecms-deletelink" > </a>' . $out;
-        $out = "<div class=\"simplecms-edit $class\" id=\"simplcms-$key-$type\" >$out</div>";
+        $out = "<div class=\"simplcms-$key-$type simplecms-edit $class\" id=\"simplcms-$key-$type\" >$out</div>";
         
         return $out;
     }

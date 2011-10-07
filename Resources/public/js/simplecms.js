@@ -29,15 +29,15 @@ function simplecmsAjaxing(href, me){
                                 if(source != jQuery(data).attr('id') ){
                                     jQuery(data).dialog({
                                         dialogClass: 'simplecms-jquery-dialog',
-                                        title: 'can\'t save',
+                                        title: 'can\'t save'
                                     });
                                 }else{
-                                    jQuery('#'+source).html(jQuery(data).html());
+                                    jQuery('.'+source).html(jQuery(data).html());
                                     if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
-                                        simplecmsloadBind('#'+source+' div.simplecms-edit');    
-                                        simplecmsloadBindInner('#'+source);    
+                                        simplecmsloadBind('.'+source+' div.simplecms-edit');    
+                                        simplecmsloadBindInner('.'+source);    
                                     }else{
-                                        simplecmsloadBindInner('#'+source);    
+                                        simplecmsloadBindInner('.'+source);    
 
                                     }
                                 }
