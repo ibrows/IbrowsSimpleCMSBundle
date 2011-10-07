@@ -62,16 +62,16 @@ class ResponseListener {
 
         $scripts = '';
         $needed = array(
-            'jquery-1.6' => 'js/jquery-1.6.4.min.js',
-            'jquery-ui-1.8' => 'js/jquery-ui-1.8.16.custom.min.js',
-            'jquery-ui.css' => 'themes/darkness/jquery-ui.css',
-            'jquery.form' => 'js/jquery.form-2.8.5.js',
-            'jquery.tinymce' => 'js/tiny_mce/jquery.tinymce.js',
+            'jquery-1.6([^"]*).js' => 'js/jquery-1.6.4.min.js',
+            'jquery-ui-1.8([^"]*).js' => 'js/jquery-ui-1.8.16.custom.min.js',
+            'jquery-ui([^"]*).css' => 'themes/darkness/jquery-ui.css',
+            'jquery.form([^"]*).js' => 'js/jquery.form-2.8.5.js',
+            'jquery.tinymce([^"]*).js' => 'js/tiny_mce/jquery.tinymce.js',
         );
 
         if ($this->includeLibs === true) {
             foreach ($needed as $key => $value) {
-                if (strripos($content, $key) === false) {
+                if (preg_match("/$key\"/i",$content) === 0) {
                     $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/' . $value);
                     if (stripos($value, '.css')) {
                         $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
