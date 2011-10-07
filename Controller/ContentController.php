@@ -190,11 +190,13 @@ class ContentController extends Controller
             }
             return $this->redirect($this->generateUrl('ibrows_simple_cms_content_edit', array('id' => $id,'type'=>$type)));
         }else if ($this->get('request')->isXmlHttpRequest() || $this->get('request')->get('_xml_http_request')) {    
-                $errors = $editForm->getErrors();
-                foreach( $editForm->getChildren() as $key => $child){
-                    $errors[] = $child->getErrors();
+            /*
+                foreach($editForm->getChildren() as $child){
+                    print_r($child->getErrors());
                 }
-                return $this->render("IbrowsSimpleCMSBundle:Order:address.html.twig", array_merge($arr, $statusarr));
+            */
+        
+                return $this->render("IbrowsSimpleCMSBundle:Content:error.html.twig", array('errorform'=>$editForm->createView()));
                 
         }
         $deleteForm = $this->createDeleteForm($id,$type);

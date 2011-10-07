@@ -27,7 +27,10 @@ function simplecmsAjaxing(href, me){
                             success: function(data, statusText, xhr, form){
                                 source = jQuery(event.target).attr('name');
                                 if(source != jQuery(data).attr('id') ){
-                                    alert('can\'t save');
+                                    jQuery(data).dialog({
+                                        dialogClass: 'simplecms-jquery-dialog',
+                                        title: 'can\'t save',
+                                    });
                                 }else{
                                     jQuery('#'+source).html(jQuery(data).html());
                                     if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
@@ -40,7 +43,7 @@ function simplecmsAjaxing(href, me){
                                 }
                                 
                             },
-                            error: function(){
+                            error: function(html){
                                 alert('can\'t save');
                             }
                         });  

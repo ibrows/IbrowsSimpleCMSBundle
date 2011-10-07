@@ -116,3 +116,9 @@ form.simplecms-editform textarea{
     background-repeat: no-repeat;
     padding-left: 30px;
 }
+
+
+.simplecms-jquery-dialog .form-row{
+    min-height: 50px;
+    
+}

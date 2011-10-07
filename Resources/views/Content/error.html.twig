@@ -1,0 +1,9 @@
+{% spaceless %}
+
+<div id="simplecms-error" class="simplecms-error">
+{{ form_errors(errorform) }}
+    {% for  item in  errorform %}
+         {{ form_errors(item) }}
+    {% endfor %}
+        </div>
+{% endspaceless %}

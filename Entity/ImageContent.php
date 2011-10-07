@@ -142,8 +142,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         $return ='';        
         $name = $filter->filterHtml($this->getName());
         $config = array('attr'=>array('class'=>'simplecms-imagecontent','alt'=>$name,'title'=>$name));
-        $mimetpye = \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser::getInstance()->guess($this->getWebPath() );        
-        if(strpos($mimetpye, 'image')!==0){
+        $image = true;
+        try{
+            $mimetpye = \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser::getInstance()->guess($this->getWebPath() );       
+            if(strpos($mimetpye, 'image')!==0){
+                $image = false;
+            }  
+        }  catch (\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException $e ){
+
+        }
+        if(!$image){
             //if not a image
             $config = array('attr'=>array('class'=>'simplecms-downloadcontent','title'=>$name));
         }               
@@ -152,7 +160,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             $return .= "$key=\"$val\"";
         }
         
-        if(strpos($mimetpye, 'image')!==0){
+        if(!$image){
             //if not a image
             return '<a href="/'.$this->getWebPath().'" '.$return.' ">'.$name.' </a>';
         }            
