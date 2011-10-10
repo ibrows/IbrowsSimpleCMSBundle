@@ -43,6 +43,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms' => new \Twig_Filter_Method($this, 'content', array('is_safe' => array('html'))),
             'scms_collection' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
+            'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
         );
     }
 
@@ -51,62 +52,11 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms' => new \Twig_Function_Method($this, 'content', array('is_safe' => array('html'))),
             'scms_collection' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
+            'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
         );
     }
 
-    public function contentCollection($key, $type, array $arguments = array(), $default='') {
-        $debugmessage = '';
-
-        if ($this->env->isDebug()) {
-            $debugmessage .= "<!--debug IbrowsSimpleCMS Collection\n";
-            $debugmessage .= "type=$type \n";
-            $debugmessage .= "key=$key \n";
-            $debugmessage .= "default=$default \n";
-            $debugmessage .= "arguments=" . print_r($arguments, true) . " \n";
-            $debugmessage .= '-->';
-
-            if ($default == '') {
-                $default = "$key-$type";
-            }
-        }
-
-        $objs = $this->manager->findAll($type, $key);
-        $out = '';
-        $grant = $this->handler->isGranted('ibrows_simple_cms_content');
-        $addkey = $this->manager->getNewGroupKey($key,$objs);
-        if ($objs) {
-            foreach ($objs as $objkey => $content) {
-                /* @var $content \Ibrows\SimpleCMSBundle\Entity\ContentInterface */
-                $outobj = $debugmessage . $content->toHTML($this, $arguments);
-                if($grant && $this->handler->isGranted('ibrows_simple_cms_content_edit_key', array('key'=> $content->getKeyword(),'type'=>$type )) ){
-                    $outobj =$this->wrapOutputForEdit($outobj, $content->getKeyword(), $type, $arguments, $default);
-                }
-                $out .= $outobj;
-            }
-        } else if (!$grant){
-          $out = $default;
-        }
-        
-        if(!$grant){
-            return $out;
-        }
-        $class = '';
-        if(isset($arguments['inline']) && $arguments['inline'] == true ){
-            $class = 'inline';
-        }        
-        //addlink
-        if($this->handler->isGranted('ibrows_simple_cms_content_create', array('type'=>$type )) ){
-            $editpath = $this->env->getExtension('routing')->getPath('ibrows_simple_cms_content_edit_key', array('key' => $addkey, 'type' => $type));
-            $editpath .="?args=" . urlencode(serialize($arguments));
-            $editpath .="&default=" . $default;
-            $outadd = '<a href="' . $editpath . '" class="simplecms-editlink simplecms-addlink" > </a> ADD '.$default.'';
-            $outadd = "<div class=\"simplcms-$addkey-$type simplecms-edit simplecms-add $class\" id=\"simplcms-$addkey-$type\" >$outadd</div>";               
-        }
-    
-
-        return "<div class=\"simplcms-collection-$key-$type simplecms-edit-collection $class\" id=\"simplcms-collection-$key-$type\" >$out$outadd</div>"; 
-    }
-    
+   
     private function wrapOutputForEdit($out,$key, $type, array $arguments = array(), $default=''){
         $class = '';
         if(isset($arguments['inline']) && $arguments['inline'] == true ){
@@ -161,6 +111,72 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         return $this->wrapOutputForEdit($out, $key, $type, $arguments, $default);
     }
 
+    
+    public function contentCollection($key, $type, array $arguments = array(), $default=null, $noedit=false) {
+        $debugmessage = '';
+
+        if ($this->env->isDebug()) {
+            $debugmessage .= "<!--debug IbrowsSimpleCMS Collection\n";
+            $debugmessage .= "type=$type \n";
+            $debugmessage .= "key=$key \n";
+            $debugmessage .= "default=$default \n";
+            $debugmessage .= "arguments=" . print_r($arguments, true) . " \n";
+            $debugmessage .= '-->';
+
+            if ($default == null ) {
+                $default = "$key-$type";
+            }
+        }
+
+        $objs = $this->manager->findAll($type, $key);
+        $out = '';
+        $grant = $this->handler->isGranted('ibrows_simple_cms_content');
+        if($noedit){
+            $grant = false;
+        }
+        $addkey = $this->manager->getNewGroupKey($key,$objs);
+        if ($objs) {
+            foreach ($objs as $objkey => $content) {
+                /* @var $content \Ibrows\SimpleCMSBundle\Entity\ContentInterface */
+                $outobj = $debugmessage . $content->toHTML($this, $arguments);
+                if($grant && $this->handler->isGranted('ibrows_simple_cms_content_edit_key', array('key'=> $content->getKeyword(),'type'=>$type )) ){
+                    $outobj =$this->wrapOutputForEdit($outobj, $content->getKeyword(), $type, $arguments, $default);
+                }
+                $out .= $outobj;
+            }
+        } else if (!$grant){
+          $out = $default;
+        }
+        
+        if(!$grant){
+            return $out;
+        }
+        $class = '';
+        if(isset($arguments['inline']) && $arguments['inline'] == true ){
+            $class = 'inline';
+        }        
+        //addlink
+        if($this->handler->isGranted('ibrows_simple_cms_content_create', array('type'=>$type )) ){
+            $editpath = $this->env->getExtension('routing')->getPath('ibrows_simple_cms_content_edit_key', array('key' => $addkey, 'type' => $type));
+            $editpath .="?args=" . urlencode(serialize($arguments));
+            $editpath .="&default=" . $default;
+            $outadd = '<a href="' . $editpath . '" class="simplecms-editlink simplecms-addlink" > </a> ADD '.$default.'';
+            $outadd = "<div class=\"simplcms-$addkey-$type simplecms-edit simplecms-add $class\" id=\"simplcms-$addkey-$type\" >$outadd</div>";               
+        }
+    
+
+        return "<div class=\"simplcms-collection-$key-$type simplecms-edit-collection $class\" id=\"simplcms-collection-$key-$type\" >$out$outadd</div>"; 
+    }    
+    
+    
+    public function isGranted($key, $type) {
+        $grant = $this->handler->isGranted('ibrows_simple_cms_content');
+        if($grant){
+            $grant = $this->handler->isGranted('ibrows_simple_cms_content_edit_key', array('key'=> $key,'type'=>$type ));
+        }
+        return $grant;
+    }
+    
     public function filterHtml($string) {
         return twig_escape_filter($this->env, $string);
     }
