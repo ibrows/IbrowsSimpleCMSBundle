@@ -4,28 +4,27 @@ $( document ).ready( function() {
 } );
 
 function simplecmsAjaxing(href, me){
-            jQuery.ajax({
-            url: href,
-            context: me,
-            success: function(html) {   
-                var replacmentid = jQuery(this).attr('id');
-                if(jQuery(this).hasClass('simplecms-add')){
-                    replacmentid = jQuery(this).parent().attr('id')
-                }
-
-                jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
-                    dialogClass: 'simplecms-jquery-dialog',
-                    height: 'auto',
-                    width: 'auto',
-                    modal: true,
-                    resizable: false,
-                    title: 'SimpleCMS',
-                    buttons: { "Save": function() { $(this).dialog("close"); } },
-                    close: function(event, ui) {
-                        form  = jQuery('#simplecms-dialog form');
-                        form.ajaxForm({
+    jQuery.ajax({
+        url: href,
+        context: me,
+        success: function(html) {   
+            var replacmentid = jQuery(this).attr('id');
+            if(jQuery(this).hasClass('simplecms-add')){
+                replacmentid = jQuery(this).parent().attr('id')
+            }
+            jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
+                dialogClass: 'simplecms-jquery-dialog',
+                height: 'auto',
+                width: 'auto',
+                modal: true,
+                resizable: false,
+                title: 'SimpleCMS',
+                buttons: {
+                    "Save": function() {
+                        var parrent = this;
+                        jQuery('#simplecms-dialog form').ajaxForm({
                             success: function(data, statusText, xhr, form){
-                                source = jQuery(event.target).attr('name');
+                                source = jQuery(parrent).attr('name');
                                 if(source != jQuery(data).attr('id') ){
                                     jQuery(data).dialog({
                                         dialogClass: 'simplecms-jquery-dialog',
@@ -34,47 +33,28 @@ function simplecmsAjaxing(href, me){
                                 }else{
                                     jQuery('.'+source).html(jQuery(data).html());
                                     if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
-                                        simplecmsloadBind('.'+source+' div.simplecms-edit');    
+                                        simplecmsloadBind('.'+source+' div.simplecms-edit');  
                                         simplecmsloadBindInner('.'+source);    
                                     }else{
-                                        simplecmsloadBindInner('.'+source);    
-
+                                        simplecmsloadBindInner('.'+source);
                                     }
                                 }
-                                
                             },
                             error: function(html){
                                 alert('can\'t save');
                             }
-                        });  
-                        form.submit();
-                        /* don't work for files
-                        jQuery.ajax({
-                            type: form.attr('method'),
-                            url: form.attr('action'),
-                            data: form.serialize(),
-                            context: this.context,
-                            success: function(data){
-                                source = jQuery(event.target).attr('name');
-                                jQuery('#'+source).html(jQuery(data).html());
-                            },
-                            error: function(){
-                                alert('can\'t save');
-                            }
-                        });                                                
-                        */
+                        }).submit();
                         jQuery('#simplecms-dialog').remove();
                     }
-                    } );
-                    
-                    $('#simplecms-dialog form.simplecms-html textarea').tinymce(simple_cms_wysiwyg_config);
-                    
-            },
-            error: function()
-            {
-                alert('forbidden');
-            }
-        });
+                }
+            });
+            $('#simplecms-dialog form.simplecms-html textarea').tinymce(simple_cms_wysiwyg_config);   
+        },
+        error: function()
+        {
+            alert('forbidden');
+        }
+    });
 }
 
 function simplecmsloadBindInner(parent){
@@ -97,16 +77,13 @@ function simplecmsloadBindInner(parent){
         jQuery.ajax({
             url: href,
             context: me,
-            success: function(data) {   
-
+            success: function(data) {
                 if(jQuery(this).parent().hasClass('simplecms-edit-collection')){
                    jQuery(this).hide();
                 }else{
                     jQuery(this).html(jQuery(data).html());
                     simplecmsloadBindInner('#'+jQuery(this).attr('id'));   
                 }
-                
-
             },
             error: function()
             {
@@ -116,10 +93,7 @@ function simplecmsloadBindInner(parent){
     });       
 }
 
-
-function simplecmsloadBind(classtobind)
-{    
-
+function simplecmsloadBind(classtobind){    
     jQuery(classtobind).bind('mouseenter', function(event){
         jQuery(this).addClass('active');
     });
@@ -135,4 +109,3 @@ function simplecmsloadBind(classtobind)
         simplecmsAjaxing(href,me);
     });
 }
- 
