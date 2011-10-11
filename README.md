@@ -206,4 +206,15 @@ TODO
  
   - create the ODM version
 
+AUTHORS
+----
+ 
+ Developed at iBROWS GmbH Zurich: 
+ Marc Steiner
+ Dominik Zogg
+ Olivier Kofler
+ 
+ Twitter: 
+ @iBRWOSWEB
+ 
 
