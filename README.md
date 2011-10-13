@@ -7,25 +7,25 @@ Quick example
 
 How to use simple CMS
 
-1. Use filter 
+Just add a tag to your twig file to allow user to edit a specific entity type (by default, text & image is provided)
+
+Some Examples
+
 ``` twig
+{# add a text with key 'mycustomtextidentifier'  #}
 {{ 'mycustomtextidentifier'|scms('text') }}
-```
-2. OR
-``` twig function
+
+{# add a image with key 'mycustomimageidentifier'  #}
 {{ scms('mycustomimageidentifier','image') }}
-```
 
-How to use the same for a flexible amount of items
-
-1. Use filter
-``` twig
+{# add a collections of texts with key 'mycustomtextidentifier'  #}
 {{ 'mycustomtextidentifier'|scms_collection('text') }}
-```
-2. OR
-``` twig function
+
+{# add a collections of images with key 'mycustomimageidentifier'  #}
 {{ scms_collection('mycustomimageidentifier','image') }}
+
 ```
+
 
 
 
@@ -139,7 +139,7 @@ Additional configuration
 ------------------------
 
 ### Edit default config 
-    // app/config/conf.yml
+    # app/config/conf.yml
 
         ibrows_simple_cms:
           include_js_libs: true
@@ -150,38 +150,38 @@ Additional configuration
 
 ### Add security per type
 
-    // app/config/conf.yml
+    # app/config/conf.yml
 
         ibrows_simple_cms:
           types:
-        //#defaults
-            text: { class: Ibrows\SimpleCMSBundle\Entity\TextContent , type: Ibrows\SimpleCMSBundle\Form\TextContentType, security:{general:ROLE_ADMIN} }
-            image: { class: Ibrows\SimpleCMSBundle\Entity\ImageContent, type: Ibrows\SimpleCMSBundle\Form\FileContentType, security:{general:ROLE_ADMIN, show: ROLE_SUPER_ADMIN, create: ROLE_SUPER_ADMIN , edit: ROLE_SUPER_ADMIN , delete: ROLE_SUPER_ADMIN  } }
+        # defaults
+            text: { class: Ibrows\SimpleCMSBundle\Entity\TextContent , type: Ibrows\SimpleCMSBundle\Form\TextContentType, security:{general: ROLE_ADMIN} }
+            image: { class: Ibrows\SimpleCMSBundle\Entity\ImageContent, type: Ibrows\SimpleCMSBundle\Form\FileContentType, security:{general: ROLE_ADMIN, show: ROLE_SUPER_ADMIN, create: ROLE_SUPER_ADMIN , edit: ROLE_SUPER_ADMIN , delete: ROLE_SUPER_ADMIN  } }
 
 ### Edit TinyMCE Options
 
 
-    // app/config/conf.yml
+    # app/config/conf.yml
 
         ibrows_simple_cms:
           wysiwyg:
             theme: 'advanced'
             theme_advanced_buttons1: 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect'
-        //#other configs...
+        # other configs...
 
 
 
 ### Add types  
 Add / Edit types of Content:
 
-    // app/config/conf.yml
+    # app/config/conf.yml
 
         ibrows_simple_cms:
           types:
-        //#defaults
+            # defaults
             text: { class: Ibrows\SimpleCMSBundle\Entity\TextContent , type: Ibrows\SimpleCMSBundle\Form\TextContentType }
             image: { class: Ibrows\SimpleCMSBundle\Entity\ImageContent, type: Ibrows\SimpleCMSBundle\Form\FileContentType}
-        //#custom
+            # custom
             mytext: { class: Ibrows\SimpleCMSBundle\Entity\TextContent , type: Ibrows\SimpleCMSBundle\Form\TextContentType , repository: Ibrows\SimpleCMSBundle\Repository\TextContent, label:first}
             mycustomentity: { class: Ibrows\XXXBundle\Entity\YYYContent , type: Ibrows\SimpleCMSBundle\Form\YYYContentType , repository: Ibrows\SimpleCMSBundle\Repository\Content, label:myone}
 
