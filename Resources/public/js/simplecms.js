@@ -39,12 +39,17 @@ function simplecmsAjaxing(href, me){
                                         simplecmsloadBindInner('.'+source);
                                     }
                                 }
+                                $(this).dialog("close");
+                                jQuery('#simplecms-dialog').remove();
                             },
                             error: function(html){
                                 alert('can\'t save');
+                                $(this).dialog("close");
+                                jQuery('#simplecms-dialog').remove();
+                                
                             }
                         }).submit();
-                        jQuery('#simplecms-dialog').remove();
+                       
                     }
                 }
             });
