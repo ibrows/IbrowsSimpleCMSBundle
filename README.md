@@ -193,11 +193,11 @@ It's also a good idea to extend `Ibrows\SimpleCMSBundle\ContentType` in your For
 
 Screenshots
 -----------
-![SimpleCMS1](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple1.png "Simple CMS")
+![SimpleCMS1](http://ibrows.ch/tl_files/content/newsblog/teaserimages/simple1.png "Simple CMS")
 
-![SimpleCMS2](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple2.png "Simple CMS")
+![SimpleCMS2](http://ibrows.ch/tl_files/content/newsblog/teaserimages/simple2.png "Simple CMS")
 
-![SimpleCMS3](http://new.ibrows.ch/tl_files/content/newsblog/teaserimages/simple3.png "Simple CMS")
+![SimpleCMS3](http://ibrows.ch/tl_files/content/newsblog/teaserimages/simple3.png "Simple CMS")
 
 
 
