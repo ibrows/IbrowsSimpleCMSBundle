@@ -98,8 +98,12 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         } else {
             $out = $default;
         }
-
-
+        if( isset ($arguments['before'] )){
+            $out = $arguments['before'] .$out;
+        }
+        if( isset ($arguments['after'] )){
+            $out .= $arguments['after'];
+        }
         
         $grant = $this->handler->isGranted('ibrows_simple_cms_content_edit_key', array('key'=> $key,'type'=>$type ));
         //$grant = $this->handler->isGranted('ibrows_simple_cms_content');
@@ -141,6 +145,12 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             foreach ($objs as $objkey => $content) {
                 /* @var $content \Ibrows\SimpleCMSBundle\Entity\ContentInterface */
                 $outobj = $debugmessage . $content->toHTML($this, $arguments);
+                if( isset ($arguments['before'] )){
+                    $outobj = $arguments['before'] .$outobj;
+                }
+                if( isset ($arguments['after'] )){
+                    $outobj .= $arguments['after'];
+                }                
                 if($grant && $this->handler->isGranted('ibrows_simple_cms_content_edit_key', array('key'=> $content->getKeyword(),'type'=>$type )) ){
                     $outobj =$this->wrapOutputForEdit($outobj, $content->getKeyword(), $type, $arguments, $default);
                 }

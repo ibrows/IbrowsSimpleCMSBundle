@@ -1,4 +1,4 @@
-$( document ).ready( function() {
+jQuery ( document ).ready( function() {
     simplecmsloadBind('div.simplecms-edit');
     simplecmsloadBindInner('div.simplecms-edit');
 } );
