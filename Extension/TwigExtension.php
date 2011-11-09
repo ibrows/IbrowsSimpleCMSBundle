@@ -106,7 +106,9 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         if(!$grant){
           return $out;
         }
-        
+        if ($out == '') {
+                $out = "$key-$type";
+        }        
 
         return $this->wrapOutputForEdit($out, $key, $type, $arguments, $default);
     }
