@@ -32,10 +32,10 @@ Some Examples
 Advanced examples
 -----------------
 
-Single image with `my` class and inline editorstyle (instead of block)
+Single image with `my` class and inline editorstyle (instead of block) and a specific locale (default is the current locale)
 
 ``` twig
-{{ scms('mycustomidentifier','image',{'inline':true,'attr':{'class':'my'} }) }}
+{{ scms('mycustomidentifier','image',{'inline':true,'attr':{'class':'mycssclass'} },'de_CH'  ) }}
 ```
 
 Flexible amount of wysiwyg text elements

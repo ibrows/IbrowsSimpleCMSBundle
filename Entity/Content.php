@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass 
  */
-abstract class  Content implements ContentInterface
+abstract class Content implements ContentInterface
 {
-    
+
     /**
      * @var integer $id
      *
@@ -33,13 +33,12 @@ abstract class  Content implements ContentInterface
      *
      */
     protected $params;
-    
-    
-    public function setParameters(\Symfony\Component\DependencyInjection\ContainerInterface $params) {
+
+    public function setParameters(\Symfony\Component\DependencyInjection\ContainerInterface $params)
+    {
         $this->params = $params;
     }
-    
-    
+
     /**
      * Get id
      *
@@ -70,50 +69,43 @@ abstract class  Content implements ContentInterface
         return $this->keyword;
     }
 
-    
-    protected function mergeUserArgs(array $userargs,array $defaultargs){
-        if(isset($userargs['attr'])){
-            $attr = $userargs['attr'];  
-            if(!is_array($attr)){
+    protected function mergeUserArgs(array $userargs, array $defaultargs)
+    {
+        if (isset($userargs['attr'])) {
+            $attr = $userargs['attr'];
+            if (!is_array($attr)) {
                 throw \Exception('No array given');
             }
-        }else{
+        } else {
             $attr = array();
         }
-        if(isset($defaultargs['attr'])){
-            $defaultattr = $defaultargs['attr'];  
-            if(!is_array($defaultattr)){
+        if (isset($defaultargs['attr'])) {
+            $defaultattr = $defaultargs['attr'];
+            if (!is_array($defaultattr)) {
                 throw \Exception('No array given');
             }
-        }else{
+        } else {
             $defaultattr = array();
-        }        
-        foreach($defaultattr as $key => $value){
-            if(!isset( $attr[$key])){
-                $attr[$key] = $defaultattr[$key] ;
-            }else if ($key == 'class'){
-                $attr[$key] .= ' '. $defaultattr[$key] ;
-            }    
-            
         }
-        return array('attr'=>$attr);
-        
+        foreach ($defaultattr as $key => $value) {
+            if (!isset($attr[$key])) {
+                $attr[$key] = $defaultattr[$key];
+            } else if ($key == 'class') {
+                $attr[$key] .= ' ' . $defaultattr[$key];
+            }
+        }
+        return array('attr' => $attr);
     }
-    
+
     /**
      * Get the HTML for frontend
      * @param \Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter
      * @param array $args
      * @return string 
      */
-    public function toHTML(\Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter, array $args){
+    public function toHTML(\Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter, array $args)
+    {
+        return 'id' . $this->getId() . 'keyword' . $this->getKeyword();
+    }
 
-
-            
-                
-        
-        
-        return 'id'.$this->getId().'keyword'.$this->getKeyword();
-    }    
-    
 }

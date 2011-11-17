@@ -26,7 +26,8 @@
         </service>    
         <service id="ibrows_simple_cms.twig_extension" class="Ibrows\SimpleCMSBundle\Extension\TwigExtension">
             <tag name="twig.extension"/>            
-            <argument type="service" id="ibrows_simple_cms.content_manager" />            
+            <argument type="service" id="ibrows_simple_cms.content_manager" />  
+            <argument type="service" id="translator" />
             <call method="setSecurityHandler">
                 <argument type="service" id="ibrows_simple_cms.securityhandler" />
             </call>              
