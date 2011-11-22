@@ -28,6 +28,8 @@
             <tag name="twig.extension"/>            
             <argument type="service" id="ibrows_simple_cms.content_manager" />  
             <argument type="service" id="translator" />
+            <argument type="service" id="router" />
+            <argument type="service" id="service_container" />
             <call method="setSecurityHandler">
                 <argument type="service" id="ibrows_simple_cms.securityhandler" />
             </call>              
@@ -49,6 +51,14 @@
             <argument>%ibrows_simple_cms.global_role%</argument> 
             <argument>%ibrows_simple_cms.securitymap%</argument> 
             
-        </service>            
+        </service>      
+        
+         <service id="ibrows_simple_cms.metatag_listener" class="Ibrows\SimpleCMSBundle\Listener\MetaTagListener" scope="request">
+            <argument type="service" id="templating.helper.assets" />
+            <argument type="service" id="ibrows_simple_cms.securityhandler" />
+            <argument type="service" id="router" />
+            <tag name="kernel.event_listener" event="kernel.response" />
+        </service>       
+         
     </services>
 </container>

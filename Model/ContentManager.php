@@ -11,7 +11,7 @@ class ContentManager
     protected $items;
 
     const GROUP_DELIMITER = '___';
-    const LOCALE_DELIMITER = '||';
+    const LOCALE_DELIMITER = '---';
 
     public function __construct(\Doctrine\ORM\EntityManager $em, $entitiesToManage)
     {
@@ -61,6 +61,9 @@ class ContentManager
 
     public function getRepository($type='text')
     {
+        if(!key_exists($type, $this->items)){
+            throw new \Exception("Type '$type' not found, try: ". implode(',',  array_keys($this->items)));           
+        }
         return $this->items[$type]->getRepository();
     }
 
@@ -91,7 +94,7 @@ class ContentManager
         $class = $this->getClass($type);
         $obj = new $class();
         $obj->setKeyword($key);
-        $obj->setLocale($locale);
+        self::setLocale($obj, $locale);
         return $obj;
     }
 
@@ -191,7 +194,7 @@ class ContentManager
      */
     public static function setLocale(\Ibrows\SimpleCMSBundle\Entity\ContentInterface $content, $locale)
     {
-        $content->setKeyword(generateLocaledKeyword($content->getKeyword(), $locale));
+        $content->setKeyword(self::generateLocaledKeyword($content->getKeyword(), $locale));
     }
 
     /**
@@ -200,7 +203,7 @@ class ContentManager
      */
     public static function getLocale(\Ibrows\SimpleCMSBundle\Entity\ContentInterface $content)
     {
-        $arr = explode('||', $content->getKeyword(), -1);
+        $arr = explode(self::LOCALE_DELIMITER, $content->getKeyword(), -1);
         if (sizeof($arr) > 0 && $arr[0] != '') {
             return $arr[0];
         } else {
@@ -214,18 +217,20 @@ class ContentManager
      * @param string $locale
      * @return string $key
      */
-    public static function generateLocaledKeyword($key, $locale)
+    public static function generateLocaledKeyword($key, $locale)            
     {
+
         $pos = stripos($key, self::LOCALE_DELIMITER);
         if ($pos === false && $locale != null) {
             $key = $locale . self::LOCALE_DELIMITER . $key;
         } else {
-            $pos++;
+            $pos = strlen(self::LOCALE_DELIMITER)+$pos;
             if ($locale == null) {
-                $key = substr($key, $pos);
+                //$key = substr($key, $pos); do nothing
             } else {
-                $key = $locale . self::LOCALE_DELIMITER . substr($key, $pos);
+                $key = $locale . self::LOCALE_DELIMITER . substr($key, $pos);           
             }
+            
         }
         return $key;
     }

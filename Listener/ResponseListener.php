@@ -36,7 +36,7 @@ class ResponseListener {
         $request = $event->getRequest();
 
         // do not capture redirects or modify XML HTTP Requests
-        if ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()  || $request->get('_xml_http_request') || !$response->isSuccessful()) {
             return;
         }
 

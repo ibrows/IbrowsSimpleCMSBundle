@@ -1,5 +1,5 @@
 {%if groupkey is defined and groupkey %}
-{{ scmsc( groupkey[1],type,args,default ) }}
+{{ scmsc( groupkey[1],type,args,locale,default ) }}
 {% else %}
-{{ scms( key,type,args,default ) }}
+{{ scms( key,type,args,locale,default ) }}
 {% endif %}

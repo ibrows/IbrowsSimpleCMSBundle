@@ -70,6 +70,9 @@ class Configuration implements ConfigurationInterface
                         'file'=> array('class'=> 'Ibrows\SimpleCMSBundle\Entity\ImageContent','type'=>'Ibrows\SimpleCMSBundle\Form\FileContentType','repository'=>null,'label'=>null,'security'=>array(
                             'general' => 'IS_AUTHENTICATED_ANONYMOUSLY','show' => 'IS_AUTHENTICATED_ANONYMOUSLY','create' => 'IS_AUTHENTICATED_ANONYMOUSLY','edit' => 'IS_AUTHENTICATED_ANONYMOUSLY','delete'=> 'IS_AUTHENTICATED_ANONYMOUSLY'
                             )),                        
+                        'metatags'=> array('class'=> 'Ibrows\SimpleCMSBundle\Entity\MetaTagContent','type'=>'Ibrows\SimpleCMSBundle\Form\MetaTagContentType','repository'=>null,'label'=>null,'security'=>array(
+                            'general' => 'IS_AUTHENTICATED_ANONYMOUSLY','show' => 'IS_AUTHENTICATED_ANONYMOUSLY','create' => 'IS_AUTHENTICATED_ANONYMOUSLY','edit' => 'IS_AUTHENTICATED_ANONYMOUSLY','delete'=> 'IS_AUTHENTICATED_ANONYMOUSLY'
+                            )),                              
                         ))
                 ->end()
                         

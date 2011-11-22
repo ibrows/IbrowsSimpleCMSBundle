@@ -28,6 +28,18 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
     protected $translator;
 
     /**
+     *
+     * @var  \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;    
+
+    /**
+     *
+     * @var  \Symfony\Component\DependencyInjection\Container
+     */
+    protected $container;        
+    
+    /**
      * {@inheritdoc}
      */
     public function initRuntime(\Twig_Environment $environment)
@@ -35,10 +47,12 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         $this->env = $environment;
     }
 
-    public function __construct(\Ibrows\SimpleCMSBundle\Model\ContentManager $manager, \Symfony\Component\Translation\TranslatorInterface $translator)
+    public function __construct(\Ibrows\SimpleCMSBundle\Model\ContentManager $manager, \Symfony\Component\Translation\TranslatorInterface $translator, \Symfony\Component\Routing\RouterInterface $router, \Symfony\Component\DependencyInjection\Container $container)
     {
         $this->manager = $manager;
         $this->translator = $translator;
+        $this->router = $router;
+        $this->container = $container;
     }
 
     public function setSecurityHandler(\Ibrows\SimpleCMSBundle\Security\SecurityHandler $handler)
@@ -56,34 +70,76 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms_collection' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
+            'scms_metatags' => new \Twig_Filter_Method($this, 'metaTags', array('is_safe' => array('html'))),
         );
     }
 
     public function getFunctions()
     {
-        return array(
+        return array(            
             'scms' => new \Twig_Function_Method($this, 'content', array('is_safe' => array('html'))),
             'scms_collection' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
+            'scms_iseditmode' => new \Twig_Function_Method($this, 'isGranted', array('is_safe' => array('html'))),
+            'scms_metatags' => new \Twig_Function_Method($this, 'metaTags', array('is_safe' => array('html'))),
         );
     }
+    
+    
+    public function metaTags($defaults=true, array $arguments = array()){        
+        $locale = $this->translator->getLocale();
+        $currentlang = substr($locale,0,2);
+        if(!isset ($arguments['pre'])){
+            $arguments['pre'] = sprintf("\n%8s", ' ');
+        }
+        
 
-    private function wrapOutputForEdit($out, $key, $type, array $arguments = array(), $default='')
+        $headers = self::initMetaTagString();     
+        if($defaults){
+            $headers .= $arguments['pre'].'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+            $headers .= $arguments['pre'].'<meta http-equiv="content-language" content="'.$currentlang.'" />';
+            $headers .= $arguments['pre']. \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang,array('scheme'=>"RFC3066"));
+        }
+        $key = self::generateMetaTagKey($this->container->get('request'), $locale);
+        $obj = $this->manager->find('metatags', $key, $locale);
+        if ($obj) {
+            $headers .= $obj->toHTML($this, $arguments);      
+        }    
+        return $headers;       
+    }
+    
+    public static function initMetaTagString(){
+        return "<!--scms-metatags-->";
+    }
+
+    public static function generateMetaTagKey( \Symfony\Component\HttpFoundation\Request $request, $locale){
+        $key = str_replace('/','-', $request->getPathInfo());
+        $key = \Ibrows\SimpleCMSBundle\Model\ContentManager::generateLocaledKeyword('metatag'.$key, $locale) ;   
+        return $key;
+    }
+
+    public static function wrapOutputEdit(\Symfony\Component\Routing\RouterInterface $router,$out, $key, $type, array $arguments = array(), $default='')
     {
         $class = '';
         if (isset($arguments['inline']) && $arguments['inline'] == true) {
             $class = 'inline';
         }
 
-        $editpath = $this->env->getExtension('routing')->getPath('ibrows_simple_cms_content_edit_key', array('key' => $key, 'type' => $type));
+        $editpath = $router->generate('ibrows_simple_cms_content_edit_key', array('key' => $key, 'type' => $type));
         $editpath .="?args=" . urlencode(serialize($arguments));
         $editpath .="&default=" . $default;
         $out = '<a href="' . $editpath . '" class="simplecms-editlink" ></a>' . $out;
-        $out = '<a href="' . $this->env->getExtension('routing')->getPath('ibrows_simple_cms_content_delete_key', array('key' => $key, 'type' => $type)) . '" class="simplecms-deletelink" > </a>' . $out;
+        $out = '<a href="' . $router->generate('ibrows_simple_cms_content_delete_key', array('key' => $key, 'type' => $type)) . '" class="simplecms-deletelink" > </a>' . $out;
         $out = "<div class=\"simplcms-$key-$type simplecms-edit $class\" id=\"simplcms-$key-$type\" >$out</div>";
 
         return $out;
+    }    
+    
+    
+    
+    private function wrapOutputForEdit($out, $key, $type, array $arguments = array(), $default='')
+    {
+        return self::wrapOutputEdit(  $this->router, $out, $key, $type, $arguments, $default);
     }
 
     public function content($key, $type, array $arguments = array(), $locale = null, $default=null)
@@ -108,8 +164,10 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         }
         $obj = $this->manager->find($type, $key, $locale);
         if ($obj) {
+            $key = $obj->getKeyword();
             $out = $debugmessage . $obj->toHTML($this, $arguments);
         } else {
+            $key = $this->manager->generateLocaledKeyword($key, $locale);
             $out = $default;
         }
         if (isset($arguments['before'])) {
