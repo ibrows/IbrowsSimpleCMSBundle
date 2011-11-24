@@ -104,7 +104,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         
         if (null !== $this->file) {            
             $name = preg_replace('/([^a-z0-9\-\_])/i', '', $this->getName());
-            $this->setPath($this->getUploadDir().'/'.$name. time().'.'. $this->file->guessExtension());
+            $xtension = $this->file->guessExtension();
+            if($xtension == null){
+                $xtension = $this->file->getExtension();
+                if($xtension == null){
+                   $xtension = ExtensionGuesser::getInstance()->guess($this->file->getClientMimeType());
+                }
+            }
+            $this->setPath($this->getUploadDir().'/'.$name. time().'.'. $xtension);
             
         }
     }
@@ -144,7 +151,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         $config = array('attr'=>array('class'=>'simplecms-imagecontent','alt'=>$name,'title'=>$name));
         $image = true;
         try{
-            $mimetpye = \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser::getInstance()->guess($this->getWebPath() );       
+            $mimetpye = \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser::getInstance()->guess($this->getWebPath() );    
             if(strpos($mimetpye, 'image')!==0){
                 $image = false;
             }  
