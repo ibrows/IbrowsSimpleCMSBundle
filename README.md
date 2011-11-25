@@ -1,11 +1,20 @@
 IbrowsSimpleCMSBundle - Simple CMS for anyone anywhere
 ========================================================
 
-
-Quick example
+Setup the bundle
 -------------
 
+1.  Fetch the source code
+2.  Add the namespace to your autoloader
+3.  Add the bundle to your `AppKernel` class
+4.  Add routing
+5.  Generate Schema
+6.  Permissions
+7.  Enjoy
+
+
 How to use simple CMS
+-------------
 
 Just add a tag to your twig file to allow user to edit a specific entity type (by default, text & image is provided)
 
