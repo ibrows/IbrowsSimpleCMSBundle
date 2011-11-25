@@ -160,7 +160,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         }
         if(!$image){
             //if not a image
-            $config = array('attr'=>array('class'=>'simplecms-downloadcontent','title'=>$name));
+            $config = array('attr'=>array('class'=>'simplecms-downloadcontent','onclick'=>'window.open(this.href); return','title'=>$name));
         }               
         $arr = parent::mergeUserArgs($args, $config);
         foreach($arr['attr'] as $key => $val){
