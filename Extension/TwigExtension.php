@@ -31,14 +31,14 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
      *
      * @var  \Symfony\Component\Routing\RouterInterface
      */
-    protected $router;    
+    protected $router;
 
     /**
      *
      * @var  \Symfony\Component\DependencyInjection\Container
      */
-    protected $container;        
-    
+    protected $container;
+
     /**
      * {@inheritdoc}
      */
@@ -76,7 +76,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
 
     public function getFunctions()
     {
-        return array(            
+        return array(
             'scms' => new \Twig_Function_Method($this, 'content', array('is_safe' => array('html'))),
             'scms_collection' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
@@ -84,41 +84,59 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms_metatags' => new \Twig_Function_Method($this, 'metaTags', array('is_safe' => array('html'))),
         );
     }
-    
-    
-    public function metaTags($defaults=true, array $arguments = array()){        
+
+    public function metaTags($defaults=true, array $arguments = array())
+    {
         $locale = $this->translator->getLocale();
-        $currentlang = substr($locale,0,2);
-        if(!isset ($arguments['pre'])){
+        $currentlang = substr($locale, 0, 2);
+        if (!isset($arguments['pre'])) {
             $arguments['pre'] = sprintf("\n%8s", ' ');
         }
-        
 
-        $headers = self::initMetaTagString();     
-        if($defaults){
-            $headers .= $arguments['pre'].'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-            $headers .= $arguments['pre'].'<meta http-equiv="content-language" content="'.$currentlang.'" />';
-            $headers .= $arguments['pre']. \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang,array('scheme'=>"RFC3066"));
+
+        $headers = self::initMetaTagString();
+        if ($defaults) {
+            $headers .= $arguments['pre'] . '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+            $headers .= $arguments['pre'] . '<meta http-equiv="content-language" content="' . $currentlang . '" />';
+            $headers .= $arguments['pre'] . \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang, array('scheme' => "RFC3066"));
         }
         $key = self::generateMetaTagKey($this->container->get('request'), $locale);
         $obj = $this->manager->find('metatags', $key, $locale);
         if ($obj) {
-            $headers .= $obj->toHTML($this, $arguments);      
-        }    
-        return $headers;       
+            $headers .= $obj->toHTML($this, $arguments);
+        }
+        return $headers;
     }
-    
-    public static function initMetaTagString(){
+
+    public static function initMetaTagString()
+    {
         return "<!--scms-metatags-->";
     }
 
-    public static function generateMetaTagKey( \Symfony\Component\HttpFoundation\Request $request, $locale){
-        $key = str_replace('/','-', $request->getPathInfo());
-        $key = \Ibrows\SimpleCMSBundle\Model\ContentManager::generateLocaledKeyword('metatag'.$key, $locale) ;   
+    public static function generatePathInfoFromMetaTagKey($key)
+    {
+        $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($key);
+        $key = str_replace('_', '/', $arr[1]);
+        $key = str_replace('-00-', '_', $key);
         return $key;
     }
 
-    public static function wrapOutputEdit(\Symfony\Component\Routing\RouterInterface $router,$out, $key, $type, array $arguments = array(), $default='')
+    public static function generateMetaTagKeyFromPathInfo($pathinfo, $locale)
+    {
+
+        $key = str_replace('_', '-00-', $pathinfo); // replace / replacement
+        $key = str_replace('/', '_', $key); //replace /
+        $key = \Ibrows\SimpleCMSBundle\Model\ContentManager::generateLocaledKeyword($key, $locale);
+        return $key;
+    }
+
+    public static function generateMetaTagKey(\Symfony\Component\HttpFoundation\Request $request, $locale)
+    {
+
+        return self::generateMetaTagKeyFromPathInfo($request->getPathInfo(), $locale);
+    }
+
+    public static function wrapOutputEdit(\Symfony\Component\Routing\RouterInterface $router, $out, $key, $type, array $arguments = array(), $default='')
     {
         $class = '';
         if (isset($arguments['inline']) && $arguments['inline'] == true) {
@@ -133,13 +151,11 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         $out = "<div class=\"simplcms-$key-$type simplecms-edit $class\" id=\"simplcms-$key-$type\" >$out</div>";
 
         return $out;
-    }    
-    
-    
-    
+    }
+
     private function wrapOutputForEdit($out, $key, $type, array $arguments = array(), $default='')
     {
-        return self::wrapOutputEdit(  $this->router, $out, $key, $type, $arguments, $default);
+        return self::wrapOutputEdit($this->router, $out, $key, $type, $arguments, $default);
     }
 
     public function content($key, $type, array $arguments = array(), $locale = null, $default=null)

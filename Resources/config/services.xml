@@ -59,6 +59,11 @@
             <argument type="service" id="router" />
             <tag name="kernel.event_listener" event="kernel.response" />
         </service>       
-         
+        
+        <service id="ibrows_simple_cms.routing.loader" class="Ibrows\SimpleCMSBundle\Routing\RouteLoader">
+            <argument type="service" id="ibrows_simple_cms.content_manager" />      
+            <argument type="service" id="router" />
+            <tag name="routing.loader" />
+        </service>           
     </services>
 </container>

@@ -7,15 +7,17 @@ use Symfony\Component\Form\FormBuilder;
 
 class MetaTagContentType extends ContentType
 {
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder                        
-            ->add('title','text',array())
-            ->add('keywords','text',array())    
-            ->add('description','textarea',array())    
-            ->add('metatags','textarea',array('label'=>'additional metatags'))
-            
+        $builder
+                ->add('alias', 'text', array())
+                ->add('title', 'text', array())
+                ->add('keywords', 'text', array())
+                ->add('description', 'textarea', array())
+                ->add('metatags', 'textarea', array('label' => 'additional metatags'))
+
         ;
     }
 
@@ -23,8 +25,6 @@ class MetaTagContentType extends ContentType
     {
         return 'ibrows_simplecmsbundle_metatagcontenttype';
     }
-    
 
 }
-
 

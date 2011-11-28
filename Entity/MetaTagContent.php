@@ -3,12 +3,14 @@
 namespace Ibrows\SimpleCMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * Ibrows\SimpleCMSBundle\Entity\TextContent
  * 
  * @ORM\Table(name="scms_metatagscontent")
- * @ORM\Entity(repositoryClass="Ibrows\SimpleCMSBundle\Repository\TextContentRepository")
+ * @ORM\Entity(repositoryClass="Ibrows\SimpleCMSBundle\Repository\MetaTagRepository")
+ * @DoctrineAssert\UniqueEntity("alias")
  */
 class MetaTagContent extends Content
 {
@@ -20,6 +22,43 @@ class MetaTagContent extends Content
      */
     protected $metatags;
     static $preventvars = array('title', 'keywords', 'description');
+
+    /**
+     * @var string $alias
+     *
+     * @ORM\Column(name="alias", type="string", length=255, unique=true, nullable=true)
+     */
+    protected $alias = null;
+
+    /**
+     * @var $pathinfo
+     * @ORM\Column(type="array")
+     * 
+     */
+    protected $pathinfo;
+
+    public function getPathinfo()
+    {
+        return $this->pathinfo;
+    }
+
+    private function setPathinfo()
+    {
+        $router = $this->params->get('router');
+        $info = \Ibrows\SimpleCMSBundle\Extension\TwigExtension::generatePathInfoFromMetaTagKey($this->getKeyword());
+        $this->pathinfo = $router->match($info);
+    }
+
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        $this->setPathinfo();
+    }
 
     public function getMetatags()
     {
@@ -50,7 +89,7 @@ class MetaTagContent extends Content
 
     public function getMetatag($metatag)
     {
-        if(!isset ($this->metatags[$metatag])){
+        if (!isset($this->metatags[$metatag])) {
             return null;
         }
         return $this->metatags[$metatag];
@@ -91,7 +130,7 @@ class MetaTagContent extends Content
         $this->setMetatag('description', $description);
     }
 
-        //return html
+    //return html
     public function toHTML(\Ibrows\SimpleCMSBundle\Helper\HtmlFilter $filter, array $args)
     {
         if (isset($args['output'])) {
@@ -99,6 +138,9 @@ class MetaTagContent extends Content
         }
         if (!isset($args['pre'])) {
             $args['pre'] = "\n       ";
+        }
+        if (!is_array($this->metatags)) {
+            $this->metatags = array();
         }
         $metatagoutput = '';
         foreach ($this->metatags as $key => $tag) {

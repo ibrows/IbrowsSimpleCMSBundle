@@ -61,8 +61,8 @@ class ContentManager
 
     public function getRepository($type='text')
     {
-        if(!key_exists($type, $this->items)){
-            throw new \Exception("Type '$type' not found, try: ". implode(',',  array_keys($this->items)));           
+        if (!key_exists($type, $this->items)) {
+            throw new \Exception("Type '$type' not found, try: " . implode(',', array_keys($this->items)));
         }
         return $this->items[$type]->getRepository();
     }
@@ -107,7 +107,7 @@ class ContentManager
     public function find($type='text', $key, $locale=null, $fallback=null)
     {
         if ($fallback == null || $locale == $fallback) {
-            return $this->getRepository($type)->findOneBy(array('keyword' => self::generateLocaledKeyword($key, $locale)));
+            $results = $this->getRepository($type)->findOneBy(array('keyword' => self::generateLocaledKeyword($key, $locale)));
         } else {
             $repo = $this->getRepository($type);
             /* @var $repo \Ibrows\SimpleCMSBundle\Repository\ContentRepository */
@@ -119,8 +119,8 @@ class ContentManager
             $qb->setParameter(1, addcslashes(self::generateLocaledKeyword($key, $locale), '_'));
             $qb->setParameter(2, addcslashes(self::generateLocaledKeyword($key, $fallback), '_'));
             $results = $qb->getQuery()->execute();
-            return $results;
         }
+        return $results;
     }
 
     private static function getOrderBy($key, $fallback)
@@ -170,7 +170,7 @@ class ContentManager
         return $this->generateGroupKey($groupkey[1], $groupkey[2], $locale);
     }
 
-    public function splitGroupKey($groupkey)
+    public static function splitGroupKey($groupkey)
     {
         $matches = array();
         preg_match('!' . self::GROUP_DELIMITER . '(.*)' . self::GROUP_DELIMITER . '(.*)' . self::GROUP_DELIMITER . '!u', $groupkey, $matches);
@@ -203,12 +203,17 @@ class ContentManager
      */
     public static function getLocale(\Ibrows\SimpleCMSBundle\Entity\ContentInterface $content)
     {
-        $arr = explode(self::LOCALE_DELIMITER, $content->getKeyword(), -1);
-        if (sizeof($arr) > 0 && $arr[0] != '') {
-            return $arr[0];
-        } else {
-            return null;
+        $arr = self::splitLocaledKeyword($content->getKeyword());
+        return $arr[0];
+    }
+
+    public static function splitLocaledKeyword($key)
+    {
+        $arr = explode(self::LOCALE_DELIMITER, $key, 2);
+        if (sizeof($arr) == 1) {
+            return array(null, $arr[0]);
         }
+        return $arr;
     }
 
     /**
@@ -217,20 +222,18 @@ class ContentManager
      * @param string $locale
      * @return string $key
      */
-    public static function generateLocaledKeyword($key, $locale)            
+    public static function generateLocaledKeyword($key, $locale)
     {
-
         $pos = stripos($key, self::LOCALE_DELIMITER);
         if ($pos === false && $locale != null) {
             $key = $locale . self::LOCALE_DELIMITER . $key;
         } else {
-            $pos = strlen(self::LOCALE_DELIMITER)+$pos;
+            $pos = strlen(self::LOCALE_DELIMITER) + $pos;
             if ($locale == null) {
                 //$key = substr($key, $pos); do nothing
             } else {
-                $key = $locale . self::LOCALE_DELIMITER . substr($key, $pos);           
+                $key = $locale . self::LOCALE_DELIMITER . substr($key, $pos);
             }
-            
         }
         return $key;
     }
