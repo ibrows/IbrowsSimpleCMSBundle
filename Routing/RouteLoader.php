@@ -51,7 +51,7 @@ class RouteLoader extends FileLoader
      */
     public function load($resource, $type = null)
     {
-        $collection = new SymfonyRouteCollection;
+        $collection = new SymfonyRouteCollection();
         $repo = $this->manager->getRepository('metatags');
         /* @var $repo \Ibrows\SimpleCMSBundle\Repository\MetaTagRepository         */
         $results = $repo->findAllAlias();
