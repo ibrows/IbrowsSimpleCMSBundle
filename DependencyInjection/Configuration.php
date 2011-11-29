@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
                
                 ->booleanNode('include_js_libs')->defaultTrue()->end()
                 ->scalarNode('upload_dir')->defaultValue('uploads/documents')->end()            
-                ->scalarNode('role')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()            
+                ->scalarNode('role')->defaultValue('ROLE_IS_AUTHENTICATED_ANONYMOUSLY')->end()            
                 ->arrayNode('types')
                     ->useAttributeAsKey('id')
                     ->prototype('array')
