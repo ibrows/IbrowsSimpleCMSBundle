@@ -14,6 +14,7 @@ class RouteLoader extends FileLoader
      * @var \Ibrows\SimpleCMSBundle\Model\ContentManager
      */
     protected $manager;
+
     /**
      *
      * @var  \Symfony\Component\Routing\RouterInterface
@@ -21,7 +22,7 @@ class RouteLoader extends FileLoader
     protected $router;
 
     const ROUTE_BEGIN = 'scms_';
-    
+
     /**
      * @param \Ibrows\SimpleCMSBundle\Model\ContentManager $pool
      */
@@ -55,19 +56,13 @@ class RouteLoader extends FileLoader
         $repo = $this->manager->getRepository('metatags');
         /* @var $repo \Ibrows\SimpleCMSBundle\Repository\MetaTagRepository         */
         $results = $repo->findAllAlias();
-        if(!$results ){
-            return null;
-        }
-        foreach($results as $metatag){           
+        foreach ($results as $metatag) {
             $pathinfo = unserialize($metatag['pathinfo']);
             $oldroute = $pathinfo['_route'];
-            $route = new Route($metatag['alias'],$pathinfo, array(), array());
-            $collection->add(self::ROUTE_BEGIN.$oldroute, $route);
-            
+            $route = new Route($metatag['alias'], $pathinfo, array(), array());
+            $collection->add(self::ROUTE_BEGIN . $oldroute, $route);
         }
-        
-
-        return $collection;        
+        return $collection;
     }
-   
+
 }
