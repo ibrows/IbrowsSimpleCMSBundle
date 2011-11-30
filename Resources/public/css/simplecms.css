@@ -85,8 +85,8 @@ div.simplecms-edit-collection div.simplecms-edit.active{
 
 
 form.simplecms-editform{
-    min-width: 600px;    
-    min-height:400px;    
+    min-width: 800px;    
+    min-height: 400px;    
 }
 form.simplecms-editform label{
     min-width: 200px;
@@ -101,8 +101,8 @@ form.simplecms-editform input{
     text-align: left;
 }
 form.simplecms-editform textarea{
-    min-width: 600px;
-    min-height: 100px;
+    min-width: 800px;
+    min-height: 380px;
     display: block;
     text-align: left;
     resize: auto;
