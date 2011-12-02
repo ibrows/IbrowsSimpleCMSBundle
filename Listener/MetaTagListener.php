@@ -53,10 +53,11 @@ class MetaTagListener
         $infos = $this->router->match($pathinfo);
         if (strpos($infos['_route'], \Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN) === 0) {
             // allready alias, get the base pathinfo
-            $realname = substr($infos['_route'], strlen(\Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN));
-            unset($infos['_route']);
-            $infos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
-            $pathinfo = $this->router->generate($realname, $infos);
+            $oldinfos = \Ibrows\SimpleCMSBundle\Routing\RouteLoader::getPathinfo($infos['_route']);
+            $oldroute = $oldinfos['_route'];
+            unset($oldinfos['_route']);
+            $oldinfos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
+            $pathinfo = $this->router->generate($oldroute, $oldinfos);
             $pathinfo = str_replace('/app_dev.php', '', $pathinfo);
         }
 
