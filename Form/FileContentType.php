@@ -13,7 +13,8 @@ class FileContentType extends ContentType
         
         $builder                        
             ->add('name')
-            ->add('file')                
+            ->add('file')
+            ->add('description')    
         ;
     }
 
