@@ -181,14 +181,14 @@ class ImageContent extends Content
         }
         $arr = parent::mergeUserArgs($args, $config);
         foreach ($arr['attr'] as $key => $val) {
-            $return .= "$key=\"$val\"";
+            $return .= " $key=\"$val\"";
         }
 
         if (!$image) {
             //if not a image
-            return '<a href="/' . $this->getWebPath() . '" ' . $return . ' ">' . $name . ' </a>';
+            return '<a href="/' . $this->getWebPath() . '" ' . $return . ' >' . $name . ' </a>';
         }
-        $return = '<img src="/' . $this->getWebPath() . '" ' . $return . ' ">';
+        $return = '<img src="/' . $this->getWebPath() . '" ' . $return . ' >';
         return $return;
         ;
     }
