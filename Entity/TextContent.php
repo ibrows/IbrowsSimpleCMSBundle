@@ -39,13 +39,29 @@ use Doctrine\ORM\Mapping as ORM;
         if(!isset ($args['html'])  ||  $args['html'] != true){
             $text = $filter->filterHtml($text);
             $text = nl2br($text); 
-        }
-            
-        
+        }else if(!isset ($args['nojs'])  ||  $args['nojs'] != true){
+            $text = self::mailSpamProtect($text);
+        }                   
         
         return '<span '.$return.'>'
                 .$text.
             '</span>'
             ;
+    }
+    
+    public static function mailSpamProtect($html){
+            $replacment = '
+<script language="JavaScript" type="text/javascript">
+<!--
+	var string1 = "\\2";
+	var string2 = "@";
+	var string3 = "\\3";
+	var string4 = string1 + string2 + string3;
+	document.write("<a href=" + "mail" + "to:" + string1 +
+		string2 + string3 + ">" + string4 + "</a>");
+//-->
+</script>
+';
+            return preg_replace('!<a([^>])+mailto:([^\s<>"@]+)@([^\s<>"@]+)([^>]*)>([^<]+)</a>!', $replacment, $html);        
     }
 }
