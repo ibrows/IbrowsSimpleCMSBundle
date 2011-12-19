@@ -100,10 +100,15 @@ function simplecmsloadBindInner(parent){
 
 function simplecmsloadBind(classtobind){    
     jQuery(classtobind).bind('mouseenter', function(event){
-        jQuery(this).addClass('active');
+        var $this =  jQuery(this);
+        $this.data('simplecms-css-zindex', $this.css('zIndex'));
+        $this.addClass('active')
+            .css('zIndex', 9999);
     });
     jQuery(classtobind).bind('mouseleave', function(event){
-        jQuery(this).removeClass('active');
+        var $this = jQuery(this);
+        $this.removeClass('active')
+            .css('zIndex', $this.data('simplecms-css-zindex'));
     });    
     jQuery(classtobind).bind('dblclick', function(event){
         event.preventDefault();
