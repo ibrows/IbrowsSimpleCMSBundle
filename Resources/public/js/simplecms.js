@@ -4,6 +4,48 @@ jQuery ( document ).ready( function() {
 } );
 
 function simplecmsAjaxing(href, me){
+    //var dialog = jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
+    var dialog = jQuery('<div id="simplecms-dialog" class="loading">loading</div>').dialog({
+        dialogClass: 'simplecms-jquery-dialog',
+        height: 'auto',
+        width: 'auto',
+        modal: true,
+        resizable: false,
+        title: 'SimpleCMS',
+        buttons: {
+            "Save": function() {
+                var parrent = this;
+                jQuery('#simplecms-dialog form').ajaxForm({
+                    success: function(data, statusText, xhr, form){
+                        source = jQuery(parrent).attr('name');
+                        if(source != jQuery(data).attr('id') ){
+                            jQuery(data).dialog({
+                                dialogClass: 'simplecms-jquery-dialog',
+                                title: 'can\'t save'
+                            });
+                        }else{
+                            jQuery('.'+source).html(jQuery(data).html());
+                            if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
+                                simplecmsloadBind('.'+source+' div.simplecms-edit');  
+                                simplecmsloadBindInner('.'+source);    
+                            }else{
+                                simplecmsloadBindInner('.'+source);
+                            }
+                        }
+                        jQuery(this).dialog("close");
+                        jQuery('#simplecms-dialog').remove();
+                    },
+                    error: function(html){
+                        alert('can\'t save');
+                        jQuery(this).dialog("close");
+                        jQuery('#simplecms-dialog').remove();
+                                
+                    }
+                }).submit();
+                       
+            }
+        }
+    });
     jQuery.ajax({
         url: href,
         context: me,
@@ -12,48 +54,14 @@ function simplecmsAjaxing(href, me){
             if(jQuery(this).hasClass('simplecms-add')){
                 replacmentid = jQuery(this).parent().attr('id')
             }
-            jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
-                dialogClass: 'simplecms-jquery-dialog',
-                height: 'auto',
-                width: 'auto',
-                modal: true,
-                resizable: false,
-                title: 'SimpleCMS',
-                buttons: {
-                    "Save": function() {
-                        var parrent = this;
-                        jQuery('#simplecms-dialog form').ajaxForm({
-                            success: function(data, statusText, xhr, form){
-                                source = jQuery(parrent).attr('name');
-                                if(source != jQuery(data).attr('id') ){
-                                    jQuery(data).dialog({
-                                        dialogClass: 'simplecms-jquery-dialog',
-                                        title: 'can\'t save'
-                                    });
-                                }else{
-                                    jQuery('.'+source).html(jQuery(data).html());
-                                    if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
-                                        simplecmsloadBind('.'+source+' div.simplecms-edit');  
-                                        simplecmsloadBindInner('.'+source);    
-                                    }else{
-                                        simplecmsloadBindInner('.'+source);
-                                    }
-                                }
-                                $(this).dialog("close");
-                                jQuery('#simplecms-dialog').remove();
-                            },
-                            error: function(html){
-                                alert('can\'t save');
-                                $(this).dialog("close");
-                                jQuery('#simplecms-dialog').remove();
-                                
-                            }
-                        }).submit();
-                       
-                    }
-                }
-            });
-            $('#simplecms-dialog form.simplecms-html textarea').tinymce(simple_cms_wysiwyg_config);   
+            
+            dialog.attr('name', replacmentid)
+                .html(html)
+                .find('textarea')
+                .tinymce(simple_cms_wysiwyg_config)
+                ;
+            //recenter the dialog
+            dialog.dialog('option', 'position', 'center');
         },
         error: function()
         {
