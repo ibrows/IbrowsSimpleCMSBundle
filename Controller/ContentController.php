@@ -224,12 +224,15 @@ class ContentController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Content entity.');
         }
+        
+        $locale = $this->getManager()->getLocale($entity);
+        
         $em = $this->getDoctrine()->getEntityManager();
         $entity->setParameters($this->container);
         $em->remove($entity);
         $em->flush();
 
-        return $this->render('IbrowsSimpleCMSBundle:Content:editedByKey.html.twig', array('key' => $key, 'type' => $type, 'args' => array(), 'default' => ''));
+        return $this->render('IbrowsSimpleCMSBundle:Content:editedByKey.html.twig', array('key' => $key, 'locale' => $locale, 'type' => $type, 'args' => array(), 'default' => ''));
     }
 
     /**
