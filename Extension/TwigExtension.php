@@ -270,7 +270,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         return "<div class=\"simplcms-collection-$key-$type simplecms-edit-collection $class\" id=\"simplcms-collection-$key-$type\" >$out$outadd</div>";
     }
 
-    public function isGranted($key, $type)
+    public function isGranted($key = null, $type = null)
     {
         $grant = $this->handler->isGranted('ibrows_simple_cms_content');
         if ($grant) {
