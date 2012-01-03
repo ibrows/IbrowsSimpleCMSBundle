@@ -57,7 +57,7 @@ function simplecmsAjaxing(href, me){
             
             dialog.attr('name', replacmentid)
                 .html(html)
-                .find('textarea')
+                .find('form.simplecms-html textarea')
                 .tinymce(simple_cms_wysiwyg_config)
                 ;
             //recenter the dialog
