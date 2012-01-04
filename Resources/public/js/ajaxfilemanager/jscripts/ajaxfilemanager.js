@@ -66,6 +66,7 @@ function enablePreview(elem, num)
 						//alert('single click');
 						var num = getNum(this.id);
 						var path = files[num].path;
+						var url = files[num].url;
 						//alert('now: ' + now + '; dcat: ' + dcAt + '; dcDelay: ' + dcDelay);
 						if (hadDoubleClick())
 						{
@@ -117,7 +118,7 @@ function enablePreview(elem, num)
 						
 									break;
 								default:
-									showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));	
+									showThickBox(linkElem, appendQueryString(url, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));	
 									
 							}
 							

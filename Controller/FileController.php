@@ -54,8 +54,8 @@ class FileController extends Controller
         and it must be a folder under the CONFIG_SYS_ROOT_PATH or the same folder
         these two paths accept relative path only, don't use absolute path
         */
-        
-        $conf['CONFIG_SYS_DEFAULT_PATH'] =  $this->container->getParameter('kernel.root_dir'). '/../web/'.'uploads/documents/'; //accept relative path only
+
+        $conf['CONFIG_SYS_DEFAULT_PATH'] = $this->container->getParameter('ibrows_simple_cms.upload_dir'); // $this->container->getParameter('kernel.root_dir'). '/../web/'.'uploads/documents/'; //accept relative path only
         $conf['CONFIG_SYS_ROOT_PATH'] =  $conf['CONFIG_SYS_DEFAULT_PATH'];	//accept relative path only
         $conf['CONFIG_SYS_FOLDER_SHOWN_ON_TOP'] =  true; //show your folders on the top of list if true or order by name
         $conf['CONFIG_SYS_DIR_SESSION_PATH'] =  'session/';

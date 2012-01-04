@@ -2,7 +2,34 @@ jQuery ( document ).ready( function() {
     simplecmsloadBind('div.simplecms-edit');
     simplecmsloadBindInner('div.simplecms-edit');
 } );
-
+function ajaxfilemanager(field_name, url, type, win) {
+	var view = 'detail';
+	switch (type) {
+		case "image":
+		view = 'thumbnail';
+			break;
+		case "media":
+			break;
+		case "flash": 
+			break;
+		case "file":
+			break;
+		default:
+			return false;
+	}
+    tinyMCE.activeEditor.windowManager.open({       
+        url: ajaxfilemanagerurl+"?view=" + view,
+        width: 782,
+        height: 440,
+        inline : "yes",
+        close_previous : "no"
+    },{
+        window : win,
+        input : field_name
+    });
+    
+}
+    
 function simplecmsAjaxing(href, me){
     //var dialog = jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
     var dialog = jQuery('<div id="simplecms-dialog"><div class="loading">loading</div></div>').dialog({
