@@ -219,24 +219,34 @@ class ImageContent extends Content
         if (!$image) {
             //if not a image
             $config = array(
-                'attr' => array(
-                    'class' => 'simplecms-downloadcontent', 'onclick' => 'window.open(this.href); return', 'title' => $name
-                )
+                    'attr' => array(
+                        'class' => 'simplecms-downloadcontent', 'onclick' => 'window.open(this.href); return', 'title' => $name
+                    )
             );
         }
         $arr = parent::mergeUserArgs($args, $config);
         foreach ($arr['attr'] as $key => $val) {
             $return .= " $key=\"$val\"";
         }
-        $path = $this->getWebPath((isset($args['permlink']) && $args['permlink'] == true));
-
+        $path = '/' . $this->getWebPath((isset($args['permlink']) && $args['permlink'] == true));
+        if (isset($args['absolute']) && $args['absolute'] == true) {
+            $path = $this->selfURL() . $path;
+        }
         if (!$image) {
             //if not a image
-            return '<a href="/' . $path . '" ' . $return . ' >' . $name . ' </a>';
+            return '<a href="' . $path . '" ' . $return . ' >' . $name . ' </a>';
         }
-        $return = '<img src="/' . $path . '" ' . $return . ' >';
+        $return = '<img src="' . $path . '" ' . $return . ' >';
         return $return;
         ;
+    }
+   
+    private  function selfURL()
+    {
+        $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+        $protocol =  substr(strtolower($_SERVER["SERVER_PROTOCOL"]), 0, strpos($_SERVER["SERVER_PROTOCOL"], "/")) . $s;
+        $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":" . $_SERVER["SERVER_PORT"]);
+        return $protocol . "://" . $_SERVER['SERVER_NAME'] . $port ;
     }
 
 }
