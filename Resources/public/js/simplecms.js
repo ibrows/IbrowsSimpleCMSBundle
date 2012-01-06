@@ -39,6 +39,9 @@ function simplecmsAjaxing(href, me){
         modal: true,
         resizable: false,
         title: 'SimpleCMS',
+        close: function() {
+            jQuery('#simplecms-dialog').remove();        	
+        },
         buttons: {
             "Save": function() {
                 var parrent = this;
@@ -46,7 +49,7 @@ function simplecmsAjaxing(href, me){
                     success: function(data, statusText, xhr, form){
                         source = jQuery(parrent).attr('name');
                         if(source != jQuery(data).attr('id') ){
-                            jQuery(data).dialog({
+                            jQuery('<div>'+data+'</div>').dialog({
                                 dialogClass: 'simplecms-jquery-dialog',
                                 title: 'can\'t save'
                             });
