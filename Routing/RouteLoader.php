@@ -1,7 +1,6 @@
 <?php
 
 namespace Ibrows\SimpleCMSBundle\Routing;
-
 use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Config\Loader\FileLoader;
@@ -23,6 +22,8 @@ class RouteLoader extends FileLoader
 
     const ROUTE_BEGIN = 'scms_';
     const ROUTE_END = '_scms';
+
+    private static $localizedAlias;
 
     /**
      * @param \Ibrows\SimpleCMSBundle\Model\ContentManager $pool
@@ -54,7 +55,8 @@ class RouteLoader extends FileLoader
     public function load($resource, $type = null)
     {
         $collection = new SymfonyRouteCollection();
-        $repo = $this->manager->getRepository('metatags');
+        $repo = $this->manager
+                ->getRepository('metatags');
         /* @var $repo \Ibrows\SimpleCMSBundle\Repository\MetaTagRepository         */
         $results = $repo->findAllAlias();
         foreach ($results as $metatag) {
@@ -70,7 +72,7 @@ class RouteLoader extends FileLoader
     {
         $routename = self::ROUTE_BEGIN . $routename . self::ROUTE_END;
         foreach ($parameters as $key => $value) {
-            if (strpos($key, '_') !== 0) {
+            if (strpos($key, '_') !== 0 || ($key == '_locale' && self::$localizedAlias)) {
                 //escape '_'
                 $key = self::escape($key);
                 $value = self::escape($value);
@@ -110,6 +112,11 @@ class RouteLoader extends FileLoader
             }
         }
         return $pathinfo;
+    }
+
+    public static function setLocalizedAlias($localizedAlias)
+    {
+        self::$localizedAlias = $localizedAlias;
     }
 
 }
