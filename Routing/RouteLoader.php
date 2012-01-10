@@ -84,12 +84,19 @@ class RouteLoader extends FileLoader
 
     private static function escape($underlinedstring)
     {
-        return str_replace('_', '.', $underlinedstring);
+        // only [a-z0-9A-Z_.] are valid...
+        $underlinedstring = str_replace('_', '.', $underlinedstring);
+        $underlinedstring = str_replace('-', '..', $underlinedstring);
+        $underlinedstring = str_replace('%', '...', $underlinedstring);
+        return $underlinedstring;
     }
 
     private static function unescape($string)
     {
-        return str_replace('.', '_', $string);
+        $string = str_replace('...', '%', $string);
+        $string = str_replace('..', '-', $string);
+        $string = str_replace('.', '_', $string);
+        return $string;
     }
 
     public static function getPathinfo($newroutename)
