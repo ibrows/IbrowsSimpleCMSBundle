@@ -220,7 +220,7 @@ class ImageContent extends Content
             //if not a image
             $config = array(
                     'attr' => array(
-                        'class' => 'simplecms-downloadcontent', 'onclick' => 'window.open(this.href); return', 'title' => $name
+                        'class' => 'simplecms-downloadcontent', 'target' => '_blank!', 'title' => $name
                     )
             );
         }
