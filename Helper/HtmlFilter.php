@@ -10,6 +10,7 @@ interface HtmlFilter {
      */
    public function filterHtml($stringToFilter);
 
+    function generateUrl($name, $parameters = array(), $absolute = false);
 }
 
 ?>

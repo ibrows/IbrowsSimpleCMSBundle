@@ -294,4 +294,9 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         return 'simplecms';
     }
 
+    function generateUrl($name, $parameters = array(), $absolute = false)
+    {
+        return $this->router->generate($name, $parameters, $absolute);
+        
+    }
 }
