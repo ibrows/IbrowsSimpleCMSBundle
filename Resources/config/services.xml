@@ -63,7 +63,11 @@
         <service id="ibrows_simple_cms.routing.loader" class="Ibrows\SimpleCMSBundle\Routing\RouteLoader">
             <argument type="service" id="ibrows_simple_cms.content_manager" />      
             <argument type="service" id="router" />
+            <call method="setLocalizedAlias">
+                <argument>%ibrows_simple_cms.localized_alias%</argument>
+            </call>              
             <tag name="routing.loader" />
+            
         </service>           
     </services>
 </container>

@@ -56,7 +56,9 @@ class MetaTagContent extends Content
 
     public function setAlias($alias)
     {
-        $this->alias = $alias;
+        if(empty($alias)){
+            $this->alias = NULL;
+        }
         $this->setPathinfo();
     }
 

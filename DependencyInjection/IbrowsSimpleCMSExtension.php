@@ -30,6 +30,7 @@ class IbrowsSimpleCMSExtension extends Extension
         $loader->load('services.xml');
         
         $container->setParameter('ibrows_simple_cms.include_js_libs',  $config['include_js_libs'] );        
+        $container->setParameter('ibrows_simple_cms.localized_alias',  $config['localized_alias'] );
         $container->setParameter('ibrows_simple_cms.upload_dir',  $config['upload_dir']);   
         $container->setParameter('ibrows_simple_cms.global_role',  $config['role']);   
         $container->setParameter('ibrows_simple_cms.wysiwyg_config', $config['wysiwyg']);

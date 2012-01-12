@@ -2,7 +2,34 @@ jQuery ( document ).ready( function() {
     simplecmsloadBind('div.simplecms-edit');
     simplecmsloadBindInner('div.simplecms-edit');
 } );
-
+function ajaxfilemanager(field_name, url, type, win) {
+	var view = 'detail';
+	switch (type) {
+		case "image":
+		view = 'thumbnail';
+			break;
+		case "media":
+			break;
+		case "flash": 
+			break;
+		case "file":
+			break;
+		default:
+			return false;
+	}
+    tinyMCE.activeEditor.windowManager.open({       
+        url: ajaxfilemanagerurl+"?view=" + view,
+        width: 782,
+        height: 440,
+        inline : "yes",
+        close_previous : "no"
+    },{
+        window : win,
+        input : field_name
+    });
+    
+}
+    
 function simplecmsAjaxing(href, me){
     //var dialog = jQuery('<div id="simplecms-dialog" name="'+replacmentid+'">'+html+'</div>').dialog({
     var dialog = jQuery('<div id="simplecms-dialog"><div class="loading">loading</div></div>').dialog({
@@ -12,6 +39,9 @@ function simplecmsAjaxing(href, me){
         modal: true,
         resizable: false,
         title: 'SimpleCMS',
+        close: function() {
+            jQuery('#simplecms-dialog').remove();        	
+        },
         buttons: {
             "Save": function() {
                 var parrent = this;
@@ -19,7 +49,7 @@ function simplecmsAjaxing(href, me){
                     success: function(data, statusText, xhr, form){
                         source = jQuery(parrent).attr('name');
                         if(source != jQuery(data).attr('id') ){
-                            jQuery(data).dialog({
+                            jQuery('<div>'+data+'</div>').dialog({
                                 dialogClass: 'simplecms-jquery-dialog',
                                 title: 'can\'t save'
                             });
@@ -57,7 +87,7 @@ function simplecmsAjaxing(href, me){
             
             dialog.attr('name', replacmentid)
                 .html(html)
-                .find('textarea')
+                .find('form.simplecms-html textarea')
                 .tinymce(simple_cms_wysiwyg_config)
                 ;
             //recenter the dialog

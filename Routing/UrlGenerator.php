@@ -30,7 +30,8 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
         // dont generate assets                
         if (stripos($name, RouteLoader::ROUTE_BEGIN) !== 0 && stripos($name, '_assetic') !== 0) {
             try {
-                return $this->generate( RouteLoader::getRouteName($name, $parameters), $parameters, $absolute);
+                $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $parameters,$defaults ));
+                return $this->generate( $route, $parameters, $absolute);
             } catch (RouteNotFoundException $e) {
                 // do nothing, go on and do the normal Request
             }

@@ -86,10 +86,11 @@ class ResponseListener {
          $confscript= <<<HTML
 <script type="text/javascript">
     var simple_cms_wysiwyg_config = %s;
+    var ajaxfilemanagerurl = "%s";
 </script>
 HTML;
             
-        $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ));
+        $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
         $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
         $scripts .= '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
         $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/css/simplecms.css');

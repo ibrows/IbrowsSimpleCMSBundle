@@ -38,7 +38,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                
                 ->booleanNode('include_js_libs')->defaultTrue()->end()
-                ->scalarNode('upload_dir')->defaultValue('uploads/documents')->end()            
+                ->scalarNode('upload_dir')->defaultValue('uploads/documents')->end()
+                ->booleanNode('localized_alias')->defaultTrue()->end()
                 ->scalarNode('role')->defaultValue('ROLE_IS_AUTHENTICATED_ANONYMOUSLY')->end()            
                 ->arrayNode('types')
                     ->useAttributeAsKey('id')
@@ -97,6 +98,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('theme_advanced_toolbar_align')->defaultValue("left")->end()
                 ->scalarNode('theme_advanced_statusbar_location')->defaultValue("bottom")->end()
                 ->booleanNode ('theme_advanced_resizing')->defaultValue(true)->end()
+                ->booleanNode('theme_advanced_resize_horizontal')->defaultValue(true)->end()
                 ->scalarNode('content_css')->defaultValue("")->end()
                 ->arrayNode('template_templates')
                     ->prototype('array')
@@ -109,11 +111,36 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 
                 ->scalarNode('plugins')->defaultValue("autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist")->end()
+
+                ->scalarNode('mode')->defaultValue('exact')->end()
+                ->scalarNode('elements')->defaultValue('ajaxfilemanager')->end()
+                ->scalarNode('extended_valid_elements')->defaultValue('hr[class|width|size|noshade]')->end()
+                ->scalarNode('file_browser_callback')->defaultValue('ajaxfilemanager')->end()
+                ->booleanNode('paste_use_dialog')->defaultValue(false)->end()
+                ->booleanNode('apply_source_formatting')->defaultValue(true)->end()
+                ->booleanNode('force_br_newlines')->defaultValue(false)->end()
+                ->booleanNode('relative_urls')->defaultValue(true)->end()
+                
             ->end()
         ->end()->end();
 
     }    
 /*sample
+ * 
+			mode : "exact",
+			elements : "ajaxfilemanager",
+			theme : "advanced",
+			plugins : "advimage,advlink,media,contextmenu",
+			extended_valid_elements : "hr[class|width|size|noshade]",
+			file_browser_callback : "ajaxfilemanager",
+			paste_use_dialog : false,
+			theme_advanced_resizing : true,
+			theme_advanced_resize_horizontal : true,
+			apply_source_formatting : true,
+			force_br_newlines : true,
+			force_p_newlines : false,	
+			relative_urls : true 
+ * 
  * 			// General options
 			theme : "advanced",
 			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
