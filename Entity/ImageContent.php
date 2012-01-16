@@ -232,6 +232,9 @@ class ImageContent extends Content
         if (isset($args['absolute']) && $args['absolute'] == true) {
             $path = $this->selfURL() . $path;
         }
+        if (isset($args['noname']) && $args['noname'] == true) {
+            $name = null;
+        }        
         if (!$image) {
             //if not a image
             return '<a href="' . $path . '" ' . $return . ' >' . $name . ' </a>';
