@@ -58,6 +58,8 @@ class MetaTagContent extends Content
     {
         if(empty($alias)){
             $this->alias = NULL;
+        }else{
+            $this->alias = $alias;
         }
         $this->setPathinfo();
     }
