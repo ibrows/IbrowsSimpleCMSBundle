@@ -46,7 +46,15 @@ class MetaTagContent extends Content
     {
         $router = $this->params->get('router');
         $info = \Ibrows\SimpleCMSBundle\Extension\TwigExtension::generatePathInfoFromMetaTagKey($this->getKeyword());
-        $this->pathinfo = $router->match($info);
+        $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($this->getKeyword());
+        // add locale routing info after controller
+        foreach($router->match($info) as $key => $value){
+            $this->pathinfo[$key] = $value;
+            if($key == '_controller'){
+                $this->pathinfo['_locale']=$arr[0];
+            }
+        }
+        
     }
 
     public function getAlias()

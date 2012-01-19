@@ -59,6 +59,7 @@ class MetaTagListener
             $oldinfos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
             $pathinfo = $this->router->generate($oldroute, $oldinfos);
             $pathinfo = str_replace('/app_dev.php', '', $pathinfo);
+            $pathinfo = preg_replace('!([^?]*)(\?_locale=[^&]*)!', '$1',  $pathinfo);
         }
 
         $locale = 'de_CH';
