@@ -23,7 +23,7 @@ class RouteLoader extends FileLoader
     const ROUTE_BEGIN = 'scms_';
     const ROUTE_END = '_scms';
 
-    private static $localizedAlias;
+    private static $localizedAlias = true;
 
     /**
      * @param \Ibrows\SimpleCMSBundle\Model\ContentManager $pool
