@@ -36,7 +36,9 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
                 try {
                     $reqparams = array();
                     foreach ($requirements as $key => $val){
-                        $reqparams[$key] = $parameters[$key];
+                        if(key_exists($key, $parameters)){
+                            $reqparams[$key] = $parameters[$key];
+                        }
                     }
                     $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams,$defaults ));
                     return $this->generate( $route, $parameters, $absolute);
