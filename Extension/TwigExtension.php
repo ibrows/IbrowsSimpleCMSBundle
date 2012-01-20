@@ -100,7 +100,8 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             $headers .= $arguments['pre'] . '<meta http-equiv="content-language" content="' . $currentlang . '" />';
             $headers .= $arguments['pre'] . \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang, array('scheme' => "RFC3066"));
         }
-        $key = self::generateMetaTagKey($this->container->get('request'), $locale);
+        $key = self::generateMetaTagKey($this->container->get('request'),$this->container->get('router'), $locale);
+        echo $key;
         $obj = $this->manager->find('metatags', $key, $locale);
         if ($obj) {
             $headers .= $obj->toHTML($this, $arguments);
@@ -130,8 +131,26 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         return $key;
     }
 
-    public static function generateMetaTagKey(\Symfony\Component\HttpFoundation\Request $request, $locale)
+    public static function generateMetaTagKey(\Symfony\Component\HttpFoundation\Request $request, $router, $locale)
     {
+        
+        $pathinfo = $request->getPathInfo();
+        $infos = $router->match($pathinfo);
+        if (strpos($infos['_route'], \Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN) === 0) {
+            // allready alias, get the base pathinfo
+            $oldinfos = \Ibrows\SimpleCMSBundle\Routing\RouteLoader::getPathinfo($infos['_route']);
+            $oldroute = $oldinfos['_route'];
+            unset($oldinfos['_route']);
+            $oldinfos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
+            $pathinfo = $router->generate($oldroute, $oldinfos);
+            $pathinfo = str_replace('/app_dev.php', '', $pathinfo);
+            $pathinfo = preg_replace('!([^?]*)(\?_locale=[^&]*)!', '$1',  $pathinfo);
+        }
+        
+        $locale = 'de_CH';
+        if (isset($infos['_locale'])) {
+            $locale = $infos['_locale'];
+        }        
 
         return self::generateMetaTagKeyFromPathInfo($request->getPathInfo(), $locale);
     }

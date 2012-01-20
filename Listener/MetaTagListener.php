@@ -49,25 +49,9 @@ class MetaTagListener
         if (strripos($content, TwigExtension::initMetaTagString()) === false) {
             return false;
         }
-        $pathinfo = $request->getPathInfo();
-        $infos = $this->router->match($pathinfo);
-        if (strpos($infos['_route'], \Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN) === 0) {
-            // allready alias, get the base pathinfo
-            $oldinfos = \Ibrows\SimpleCMSBundle\Routing\RouteLoader::getPathinfo($infos['_route']);
-            $oldroute = $oldinfos['_route'];
-            unset($oldinfos['_route']);
-            $oldinfos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
-            $pathinfo = $this->router->generate($oldroute, $oldinfos);
-            $pathinfo = str_replace('/app_dev.php', '', $pathinfo);
-            $pathinfo = preg_replace('!([^?]*)(\?_locale=[^&]*)!', '$1',  $pathinfo);
-        }
-
-        $locale = 'de_CH';
-        if (isset($infos['_locale'])) {
-            $locale = $infos['_locale'];
-        }
-        $key = TwigExtension::generateMetaTagKeyFromPathInfo($pathinfo, $locale);
-        $label = "edit metatags of " . $pathinfo;
+        
+        $key = TwigExtension::generateMetaTagKey($request,$this->router, $request->getLocale());
+        $label = "edit metatags of " . $key;
         $editbox = TwigExtension::wrapOutputEdit(
                         $this->router, $label, $key, 'metatags', array('output' => $label)
         );
