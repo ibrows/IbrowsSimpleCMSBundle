@@ -101,7 +101,6 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             $headers .= $arguments['pre'] . \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang, array('scheme' => "RFC3066"));
         }
         $key = self::generateMetaTagKey($this->container->get('request'),$this->container->get('router'), $locale);
-        echo $key;
         $obj = $this->manager->find('metatags', $key, $locale);
         if ($obj) {
             $headers .= $obj->toHTML($this, $arguments);
