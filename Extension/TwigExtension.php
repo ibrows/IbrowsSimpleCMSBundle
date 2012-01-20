@@ -136,6 +136,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         $pathinfo = $request->getPathInfo();
         $infos = $router->match($pathinfo);
         if (strpos($infos['_route'], \Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN) === 0) {
+            
             // allready alias, get the base pathinfo
             $oldinfos = \Ibrows\SimpleCMSBundle\Routing\RouteLoader::getPathinfo($infos['_route']);
             $oldroute = $oldinfos['_route'];
@@ -151,7 +152,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             $locale = $infos['_locale'];
         }        
 
-        return self::generateMetaTagKeyFromPathInfo($request->getPathInfo(), $locale);
+        return self::generateMetaTagKeyFromPathInfo($pathinfo, $locale);
     }
 
     public static function wrapOutputEdit(\Symfony\Component\Routing\RouterInterface $router, $out, $key, $type, array $arguments = array(), $default='')
