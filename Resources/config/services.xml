@@ -57,6 +57,7 @@
             <argument type="service" id="templating.helper.assets" />
             <argument type="service" id="ibrows_simple_cms.securityhandler" />
             <argument type="service" id="router" />
+            <argument type="service" id="translator" />
             <tag name="kernel.event_listener" event="kernel.response" />
         </service>       
         

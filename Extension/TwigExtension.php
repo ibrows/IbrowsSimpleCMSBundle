@@ -147,7 +147,7 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             $pathinfo = preg_replace('!([^?]*)(\?_locale=[^&]*)!', '$1',  $pathinfo);
         }
         
-        $locale = 'de_CH';
+
         if (isset($infos['_locale'])) {
             $locale = $infos['_locale'];
         }        

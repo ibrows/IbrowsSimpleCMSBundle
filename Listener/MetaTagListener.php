@@ -17,9 +17,11 @@ class MetaTagListener
     private $assetHelper;
     private $router;
     private $securityHandler;
+    private $translator;
 
-    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router)
+    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
     {
+        $this->translator = $translator;
         $this->assetHelper = $assetHelper;
         $this->router = $router;
         $this->securityHandler = $securityHandler;
@@ -50,7 +52,7 @@ class MetaTagListener
             return false;
         }
         
-        $key = TwigExtension::generateMetaTagKey($request,$this->router, $request->getLocale());
+        $key = TwigExtension::generateMetaTagKey($request,$this->router, $this->translator->getLocale());
         $label = "edit metatags of " . $key;
         $editbox = TwigExtension::wrapOutputEdit(
                         $this->router, $label, $key, 'metatags', array('output' => $label)
