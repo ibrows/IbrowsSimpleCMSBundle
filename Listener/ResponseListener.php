@@ -15,13 +15,17 @@ class ResponseListener {
     private $assetHelper;
     private $router;
     private $includeLibs;
+    private $includeJS;
+    private $includeCSS;
     private $securityHandler;
     private $wysiwygconfig;
 
-    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, $includeLibs = true,array $wysiwygconfig = array()) {
+    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, $includeJS = true, $includeCSS = true, $includeLibs = true,array $wysiwygconfig = array()) {
         $this->assetHelper = $assetHelper;
         $this->router = $router;
         $this->includeLibs = $includeLibs;
+        $this->includeJS = $includeJS;
+        $this->includeCSS = $includeCSS;
         $this->securityHandler = $securityHandler;
         $this->wysiwygconfig = $wysiwygconfig;
     }
@@ -91,10 +95,14 @@ class ResponseListener {
 HTML;
             
         $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
-        $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
-        $scripts .= '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
-        $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/css/simplecms.css');
-        $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
+        if ($this->includeJS === true) {
+            $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
+            $scripts .= '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
+        }
+        if ($this->includeCSS === true) {
+            $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/css/simplecms.css');
+            $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
+        }        
         $content = substr($content, 0, $pos) . $scripts . substr($content, $pos);
         $response->setContent($content); 
         return true;

@@ -38,6 +38,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                
                 ->booleanNode('include_js_libs')->defaultTrue()->end()
+                ->booleanNode('include_js')->defaultTrue()->end()
+                ->booleanNode('include_css')->defaultTrue()->end()
                 ->scalarNode('upload_dir')->defaultValue('uploads/documents')->end()
                 ->booleanNode('localized_alias')->defaultTrue()->end()
                 ->scalarNode('role')->defaultValue('ROLE_IS_AUTHENTICATED_ANONYMOUSLY')->end()            
