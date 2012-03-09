@@ -190,6 +190,11 @@ class ImageContent extends Content
     {
         $return = '';
         $name = $filter->filterHtml($this->getName());
+        
+        if (isset($args['altname']) && $args['altname'] != '') {
+            $name = $filter->filterHtml($args['altname']);
+        }
+        
         $description = $filter->filterHtml($this->getDescription());
         if (empty($description)) {
             $description = $name;
