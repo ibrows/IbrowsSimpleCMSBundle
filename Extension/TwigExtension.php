@@ -148,10 +148,6 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
         }
         
 
-        if (isset($infos['_locale'])) {
-            $locale = $infos['_locale'];
-        }        
-
         return self::generateMetaTagKeyFromPathInfo($pathinfo, $locale);
     }
 

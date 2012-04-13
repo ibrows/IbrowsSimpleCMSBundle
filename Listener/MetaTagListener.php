@@ -51,7 +51,7 @@ class MetaTagListener
         if (strripos($content, TwigExtension::initMetaTagString()) === false) {
             return false;
         }
-        
+
         $key = TwigExtension::generateMetaTagKey($request,$this->router, $this->translator->getLocale());
         $label = "edit metatags of " . $key;
         $editbox = TwigExtension::wrapOutputEdit(
