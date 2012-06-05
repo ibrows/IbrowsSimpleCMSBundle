@@ -82,8 +82,26 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scmsc' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scms_iseditmode' => new \Twig_Function_Method($this, 'isGranted', array('is_safe' => array('html'))),
             'scms_metatags' => new \Twig_Function_Method($this, 'metaTags', array('is_safe' => array('html'))),
+            'scms_metatag' => new \Twig_Function_Method($this, 'metaTag', array('is_safe' => array('html'))),
         );
     }
+    
+    public function metaTag($tagname = 'title')
+    {
+        $locale = $this->translator->getLocale();
+        $currentlang = substr($locale, 0, 2);
+        if (!isset($arguments['pre'])) {
+            $arguments['pre'] = sprintf("\n%8s", ' ');
+        }
+        $key = self::generateMetaTagKey($this->container->get('request'),$this->container->get('router'), $locale);
+        $obj = $this->manager->find('metatags', $key, $locale);
+        if ($obj) {
+            /* @var $obj \Ibrows\SimpleCMSBundle\Entity\MetaTagContent   */
+            return $obj->getMetatag($tagname);
+        }
+        return null;
+    }
+    
 
     public function metaTags($defaults=true, array $arguments = array())
     {
