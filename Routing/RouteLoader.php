@@ -71,16 +71,28 @@ class RouteLoader extends FileLoader
     public static function getRouteName($routename, $parameters)
     {
         $routename = self::ROUTE_BEGIN . $routename . self::ROUTE_END;
+        $routename .= self::parameters2String($parameters);
+
+        return $routename;
+    }
+
+    private static function parameters2String($parameters){
+        $return = '';
         foreach ($parameters as $key => $value) {
+            if(is_array($value)){
+                $return .= self::parameters2String($value);
+                continue;
+            }
             if (strpos($key, '_') !== 0 || ($key == '_locale' && self::$localizedAlias)) {
                 //escape '_'
                 $key = self::escape($key);
                 $value = self::escape($value);
-                $routename .= "_{$key}_{$value}";
+                $return .= "_{$key}_{$value}";
             }
         }
-        return $routename;
+        return $return;
     }
+
 
     private static function escape($underlinedstring)
     {
