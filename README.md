@@ -54,7 +54,7 @@ Flexible amount of wysiwyg text elements
 ```
 
 
-Install & setup the bundle
+Install & setup the bundle for Symfony 2.0.x
 --------------------------
 
 1.  Fetch the source code
