@@ -2,6 +2,8 @@
 
 namespace Ibrows\SimpleCMSBundle\Entity;
 
+use Symfony\Component\Config\ConfigCache;
+
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
@@ -45,6 +47,7 @@ class MetaTagContent extends Content
     private function setPathinfo()
     {
         $router = $this->params->get('router');
+        /* @var $router \Symfony\Component\Routing\Router  */ 
         $info = \Ibrows\SimpleCMSBundle\Extension\TwigExtension::generatePathInfoFromMetaTagKey($this->getKeyword());
         $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($this->getKeyword());
         // add locale routing info after controller
@@ -54,9 +57,21 @@ class MetaTagContent extends Content
                 $this->pathinfo['_locale']=$arr[0];
             }
         }
-        
+        $this->resetRouterCache($router);
     }
 
+    private function resetRouterCache(\Symfony\Component\Routing\Router $router){
+        $cachedir = $router->getOption('cache_dir');
+        $cacheclass = $router->getOption('matcher_cache_class');
+        $cachedebug = $router->getOption('debug');
+        $cache = new ConfigCache($cachedir.'/'.$cacheclass.'.php',$cachedebug);
+        unlink($cache.'');
+        $cacheclass = $router->getOption('generator_cache_class');
+        $cache = new ConfigCache($cachedir.'/'.$cacheclass.'.php',$cachedebug);
+        unlink($cache.'');        
+    }
+    
+    
     public function getAlias()
     {
         return $this->alias;
@@ -64,6 +79,11 @@ class MetaTagContent extends Content
 
     public function setAlias($alias)
     {
+        if($alias == $this->alias){
+            //nothing changed
+            return;
+        }
+        
         if(empty($alias)){
             $this->alias = NULL;
         }else{
