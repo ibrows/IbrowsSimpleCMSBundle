@@ -1,0 +1,27 @@
+{
+    "name": "ibrows/simplecms-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony Simple CMS Bundle",
+    "keywords": ["CMS"],
+    "homepage": "http://www.ibrows.ch",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "iBROWS",
+            "homepage": "https://github.com/ibrows"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/symfony": "2.1.*",
+        "symfony/framework-bundle": "2.1.*",
+        "symfony/security-bundle": "2.1.*",
+	"doctrine/orm": "2.2.*",
+        "doctrine/doctrine-bundle": "*"
+    },
+    "autoload": {
+        "psr-0": { "Ibrows\\SimpleCMSBundle": "" }
+    },
+    "target-dir": "Ibrows/SimpleCMSBundle"
+}

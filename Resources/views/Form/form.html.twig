@@ -1,6 +1,6 @@
 {% block field_row %}
 {% spaceless %}
-   <div class="form-row {% for type in form.get('types') %} {{type}}{% endfor %}">       
+   <div class="form-row {{form.name}}">       
        {% if(label != 'none') %}
         {{ form_label(form, label|default(null)) }}
        {% endif %}

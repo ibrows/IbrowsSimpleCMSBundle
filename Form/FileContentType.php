@@ -2,12 +2,14 @@
 
 namespace Ibrows\SimpleCMSBundle\Form;
 
+use Symfony\Component\Form\FormBuilderInterface;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 class FileContentType extends ContentType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
         
