@@ -60,7 +60,11 @@ class RouteLoader extends FileLoader
         /* @var $repo \Ibrows\SimpleCMSBundle\Repository\MetaTagRepository         */
         $results = $repo->findAllAlias();
         foreach ($results as $metatag) {
-            $pathinfo = unserialize($metatag['pathinfo']);
+            if(is_array($metatag['pathinfo'])){
+                $pathinfo = $metatag['pathinfo'];
+            }else{
+                $pathinfo = unserialize($metatag['pathinfo']);
+            }    
             $oldroute = $pathinfo['_route'];
             $route = new Route($metatag['alias'], $pathinfo, array(), array());
             $collection->add(self::getRouteName($oldroute, $pathinfo), $route);
