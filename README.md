@@ -59,45 +59,27 @@ Install & setup the bundle
 
 1.  Fetch the source code
 
-    Using dept File, add these lines:
 
-    ``` bash 
-    [IbrowsSimpleCMSBundle]
-    git=https://github.com/ibrows/IbrowsSimpleCMSBundle
-    target=/bundles/Ibrows/SimpleCMSBundle
+	Add IbrowsSimpleCMSBundle in your composer.json:
+	
+	```js
+	{
+	    "require": {
+	        "ibrows/simplecms-bundle": "*"
+	    }
+	}
+	```
+	
+	Now tell composer to download the bundle by running the command:
+	
+	``` bash
+	$ php composer.phar update ibrows/simplecms-bundle
+	```
+	
+	Composer will install the bundle to your project's `ibrows/simplecms-bundle` directory.
 
-    ```
 
-    Using Git to control your project from project root directory:
-    
-    ``` bash 
-
-    git submodule add git@github.com/ibrows/IbrowsSimpleCMSBundle vendor/bundles/Ibrows/SimpleCMSBundle
-
-    ```
-        
-    By cloning repository:
-    
-    ``` bash 
-
-    mkdir -p vendor/bundles/Ibrows/SimpleCMSBundle
-    cd !$
-    git clone git@github.com/ibrows/IbrowsSimpleCMSBundle
-
-    ```
-
-2.  Add the namespace to your autoloader
-
-    ``` php
-
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        'Ibrows' => __DIR__.'/../vendor/bundles',
-        // your other namespaces
-    );
-    ```
-
-3.  Add the bundle to your `AppKernel` class
+2.  Add the bundle to your `AppKernel` class
 
     ``` php
 
@@ -114,7 +96,7 @@ Install & setup the bundle
     
     ```
 
-4.  Add routing
+3.  Add routing
 
     ``` yaml
 
@@ -127,13 +109,13 @@ Install & setup the bundle
 
     ```
 
-5.  Generate Schema
+4.  Generate Schema
 
     ``` bash
     php app/console doctrine:schema:update  --force
 
     ```
-6.  Permissions
+5.  Permissions
 
     Get permissions for FileUpload, default folder is web-dir `uploads/documents` 
 
