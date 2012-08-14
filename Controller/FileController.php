@@ -92,9 +92,9 @@ class FileController extends Controller
         $conf['CONFIG_IMG_THUMBNAIL_MAX_Y'] =  100;
         $conf['CONFIG_THICKBOX_MAX_WIDTH'] =  700;
         $conf['CONFIG_THICKBOX_MAX_HEIGHT'] =  430;
-
         
-        $conf['CONFIG_WEBSITE_DOCUMENT_ROOT'] =  '';
+        
+        $conf['CONFIG_WEBSITE_DOCUMENT_ROOT'] =  realpath($this->container->getParameter('kernel.root_dir').'/../web');
         //theme related setting
         /*
          *	options avaialbe for CONFIG_EDITOR_NAME are:
