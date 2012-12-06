@@ -125,7 +125,7 @@ class RouteLoader extends FileLoader
 
         $key = false;
         foreach ($matches as $value) {
-            if (!empty($value)) {
+            if ($value != null && $value != '' && $value !== false ) {
                 if (!$key) {
                     $key = self::unescape($value);
                 } else {
