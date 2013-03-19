@@ -47,8 +47,8 @@ function simplecmsAjaxing(href, me){
                 var parrent = this;
                 jQuery('#simplecms-dialog form').ajaxForm({
                     success: function(data, statusText, xhr, form){
-                        source = jQuery(parrent).attr('name');
-                        if(source != jQuery(data).attr('id') ){
+                        source = jQuery(parrent).data('name')
+                        if(source != jQuery(data).prop('id') ){
                             jQuery('<div>'+data+'</div>').dialog({
                                 dialogClass: 'simplecms-jquery-dialog',
                                 title: 'can\'t save'
@@ -62,12 +62,12 @@ function simplecmsAjaxing(href, me){
                                 simplecmsloadBindInner('.'+source);
                             }
                         }
-                        jQuery(this).dialog("close");
+                      //  jQuery(this).dialog("close");
                         jQuery('#simplecms-dialog').remove();
                     },
                     error: function(html){
                         alert('can\'t save');
-                        jQuery(this).dialog("close");
+                        //jQuery(this).dialog("close");
                         jQuery('#simplecms-dialog').remove();
                                 
                     }
@@ -80,12 +80,12 @@ function simplecmsAjaxing(href, me){
         url: href,
         context: me,
         success: function(html) {   
-            var replacmentid = jQuery(this).attr('id');
+            var replacmentid = jQuery(this).prop('id');
             if(jQuery(this).hasClass('simplecms-add')){
-                replacmentid = jQuery(this).parent().attr('id')
+                replacmentid = jQuery(this).parent().prop('id')
             }
             
-            dialog.attr('name', replacmentid)
+            dialog.attr('data-name', replacmentid)
                 .html(html)
                 .find('form.simplecms-html textarea')
                 .tinymce(simple_cms_wysiwyg_config)
@@ -107,10 +107,11 @@ function simplecmsloadBindInner(parent){
         
         var me = jQuery(this).parent('div');
         simplecmsDeactivateItem(me);
+        console.log(this);
+        var href = jQuery(this).prop('href') ;        
+        console.log(href);
+        simplecmsAjaxing(href,me);  
         
-        var href = jQuery(this).attr('href') ;        
-        
-        simplecmsAjaxing(href,me);        
     });    
     jQuery(parent+' a.simplecms-deletelink').bind('click', function(event){
         event.preventDefault();
@@ -119,7 +120,7 @@ function simplecmsloadBindInner(parent){
         var me = jQuery(this).parent('div');
         simplecmsDeactivateItem(me);
         
-        var href = jQuery(this).attr('href') ;        
+        var href = jQuery(this).prop('href') ;        
         
         if(false==confirm(  "delete ?")){
             return false;

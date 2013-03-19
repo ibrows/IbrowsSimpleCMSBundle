@@ -66,10 +66,10 @@ class ResponseListener {
 
         $scripts = '';
         $needed = array(
-            'jquery-1.([^"]*).js' => 'js/jquery-1.6.4.min.js',
-            'jquery-ui-1.([^"]*).js' => 'js/jquery-ui-1.8.16.custom.min.js',
-            'jquery-ui([^"]*).css' => 'themes/darkness/jquery-ui.css',
-            'jquery.form([^"]*).js' => 'js/jquery.form-2.8.5.js',
+            'jquery-1.([^"]*).js' => 'js/jquery-1.9.1.js',
+            'jquery-ui-1.([^"]*).js' => 'js/jquery-ui-1.10.2.custom.min.js',
+            'jquery-ui([^"]*).css' => 'themes/darkness/jquery-ui-1.10.2.custom.min.css',
+            'jquery.form([^"]*).js' => 'js/jquery.form-3.081.js',
             'jquery.tinymce([^"]*).js' => 'js/tiny_mce/jquery.tinymce.js',
         );
 
@@ -85,7 +85,7 @@ class ResponseListener {
                 }
             }
         }
-    
+
         $this->wysiwygconfig['script_url'] = $this->assetHelper->getUrl('bundles/ibrowssimplecms/' . 'js/tiny_mce/tiny_mce.js');
          $confscript= <<<HTML
 <script type="text/javascript">
@@ -93,7 +93,7 @@ class ResponseListener {
     var ajaxfilemanagerurl = "%s";
 </script>
 HTML;
-            
+
         $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
         if ($this->includeJS === true) {
             $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
@@ -102,9 +102,9 @@ HTML;
         if ($this->includeCSS === true) {
             $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/css/simplecms.css');
             $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
-        }        
+        }
         $content = substr($content, 0, $pos) . $scripts . substr($content, $pos);
-        $response->setContent($content); 
+        $response->setContent($content);
         return true;
     }
 
