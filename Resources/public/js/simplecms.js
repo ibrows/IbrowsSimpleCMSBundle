@@ -107,9 +107,9 @@ function simplecmsloadBindInner(parent){
         
         var me = jQuery(this).parent('div');
         simplecmsDeactivateItem(me);
-        console.log(this);
+
         var href = jQuery(this).prop('href') ;        
-        console.log(href);
+
         simplecmsAjaxing(href,me);  
         
     });    
@@ -134,7 +134,7 @@ function simplecmsloadBindInner(parent){
                    jQuery(this).hide();
                 }else{
                     jQuery(this).html(jQuery(data).html());
-                    simplecmsloadBindInner('#'+jQuery(this).attr('id'));   
+                    simplecmsloadBindInner('#'+jQuery(this).prop('id'));   
                 }
             },
             error: function()
@@ -165,7 +165,7 @@ function simplecmsloadBind(classtobind){
         var me = jQuery(this);
         simplecmsDeactivateItem(me);
         
-        var href = me.children('a.simplecms-editlink').attr('href') ;        
+        var href = me.children('a.simplecms-editlink').prop('href') ;        
         simplecmsAjaxing(href,me);
     });
 }
