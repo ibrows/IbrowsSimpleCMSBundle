@@ -101,7 +101,7 @@ class ContentController extends Controller
         $entity = $this->getManager()->getEntity($type);
         $request = $this->getRequest();
         $form = $this->createForm($this->getManager()->getFormType($type), $entity);
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -174,7 +174,7 @@ class ContentController extends Controller
 
         $request = $this->getRequest();
 
-        $editForm->bindRequest($request);
+        $editForm->bind($request);
 
         if ($editForm->isValid()) {
 
@@ -289,7 +289,7 @@ class ContentController extends Controller
         $form = $this->createDeleteForm($id, $type);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
 
