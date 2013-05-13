@@ -104,7 +104,7 @@ class ContentController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity->setParameters($this->container);
             $em->persist($entity);
             $em->flush();
@@ -128,7 +128,7 @@ class ContentController extends Controller
     {
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_edit', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_edit not allowed');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $this->getManager()->getRepository($type)->find($id);
 
@@ -157,7 +157,7 @@ class ContentController extends Controller
     {
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_update', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_update not allowed');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $additional = $this->getRequest()->getQueryString();
         $groupkey = false;
         if ($id != 0) {
@@ -227,7 +227,7 @@ class ContentController extends Controller
         
         $locale = $this->getManager()->getLocale($entity);
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $entity->setParameters($this->container);
         $em->remove($entity);
         $em->flush();
@@ -253,7 +253,7 @@ class ContentController extends Controller
                 throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_create not allowed');
             }
             $entity = $this->getManager()->create($type, $key);
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             //  $em->persist($entity);
             //  $em->flush($entity);
         } else if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_edit_key', array('type' => $type))) {
@@ -293,7 +293,7 @@ class ContentController extends Controller
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $this->getManager()->getRepository($type)->find($id);
 
             if (!$entity) {
