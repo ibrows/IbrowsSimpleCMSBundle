@@ -32,15 +32,26 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
             } catch (RouteNotFoundException $e) {
                 try {
                     $reqparams = array();
-                    foreach ($requirements as $key => $val){
-                        if(array_key_exists($key, $parameters)){
-                            $reqparams[$key] = $parameters[$key];
+                    foreach ($variables as $val) {
+                        if (key_exists($val, $parameters)) {
+                            $reqparams[$val] = $parameters[$val];
                         }
                     }
-                    $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams, $defaults ));
-                    return $this->generate( $route, $parameters, $referenceType );
+                    $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams, $defaults));
+                    return $this->generate($route, $parameters, $absolute);
                 } catch (RouteNotFoundException $e) {
-                    // do nothing, go on and do the normal Request
+                    try {
+                        $reqparams = array();
+                        foreach ($requirements as $key => $val) {
+                            if (key_exists($key, $parameters)) {
+                                $reqparams[$key] = $parameters[$key];
+                            }
+                        }
+                        $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams, $defaults));
+                        return $this->generate($route, $parameters, $absolute);
+                    } catch (RouteNotFoundException $e) {
+                        // do nothing, go on and do the normal Request
+                    }
                 }
             }
         }
