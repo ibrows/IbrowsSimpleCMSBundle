@@ -66,10 +66,10 @@ class ResponseListener {
 
         $scripts = '';
         $needed = array(
-            'jquery-1.([^"]*).js' => 'js/jquery-1.9.1.js',
-            'jquery-ui-1.([^"]*).js' => 'js/jquery-ui-1.10.2.custom.min.js',
-            'jquery-ui([^"]*).css' => 'themes/darkness/jquery-ui-1.10.2.custom.min.css',
-            'jquery.form([^"]*).js' => 'js/jquery.form-3.39.0.js',
+            'jquery-1.([^"]*).js' => 'js/jquery-1.10.2.min.js',
+            'bootstrap.([^"]*).js' => 'js/bootstrap-modal-3.0.0.js',
+            'bootstrap([^"]*).css' => 'css/bootstrap/bootstrap.css',
+            'jquery.form([^"]*).js' => 'js/jquery.form-3.43.0.min.js',
             'jquery.tinymce([^"]*).js' => 'js/tiny_mce/jquery.tinymce.js',
         );
 

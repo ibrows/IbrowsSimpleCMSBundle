@@ -1,19 +1,31 @@
 
 
+<div class="simplecms-dialog modal fade"  tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Edit {{ type }}</h4>
+        </div>
+        <div class="modal-body">
+        <form class="simplecms-editform {% if args.html is defined and args.html == true %}simplecms-html{% endif %}" action="{{ path('ibrows_simple_cms_content_update', { 'id': entity.id|default(0),'type':type, '_xml_http_request':true }) }}&{{additional}}" method="post" {{ form_enctype(edit_form) }}>
+            <input type="hidden" name="_xml_http_request" value="true">
+            {% form_theme edit_form 'IbrowsSimpleCMSBundle:Form:form.html.twig' %}
 
-<form class="simplecms-editform {% if args.html is defined and args.html == true %}simplecms-html{% endif %}" action="{{ path('ibrows_simple_cms_content_update', { 'id': entity.id|default(0),'type':type, '_xml_http_request':true }) }}&{{additional}}" method="post" {{ form_enctype(edit_form) }}>
-    <input type="hidden" name="_xml_http_request" value="true">
-    {% form_theme edit_form 'IbrowsSimpleCMSBundle:Form:form.html.twig' %}
+            {{ form_errors(edit_form) }}
+            {% for  key, item in  edit_form %}
 
-    {{ form_errors(edit_form) }}
-    {% for  key, item in  edit_form %}
+              {{ form_row(item) }}
 
+            {% endfor %}
 
-      {{ form_row(item) }}
-
-    {% endfor %}
-
-
-    {{ form_rest(edit_form) }}
-
-</form>
+            {{ form_rest(edit_form) }}
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+          <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+        </div>
+      </div><
+    </div>
+</div>
