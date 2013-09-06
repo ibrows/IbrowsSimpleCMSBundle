@@ -22,35 +22,36 @@ class IbrowsSimpleCMSExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-       
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-        
-        $container->setParameter('ibrows_simple_cms.include_js_libs',  $config['include_js_libs'] );        
+
+        $container->setParameter('ibrows_simple_cms.include_js_libs',  $config['include_js_libs'] );
         $container->setParameter('ibrows_simple_cms.include_js',  $config['include_js'] );
+        $container->setParameter('ibrows_simple_cms.include_tiny',  $config['include_tiny'] );
         $container->setParameter('ibrows_simple_cms.include_css',  $config['include_css'] );
         $container->setParameter('ibrows_simple_cms.localized_alias',  $config['localized_alias'] );
-        $container->setParameter('ibrows_simple_cms.upload_dir',  $config['upload_dir']);   
-        $container->setParameter('ibrows_simple_cms.global_role',  $config['role']);   
+        $container->setParameter('ibrows_simple_cms.upload_dir',  $config['upload_dir']);
+        $container->setParameter('ibrows_simple_cms.global_role',  $config['role']);
         $container->setParameter('ibrows_simple_cms.wysiwyg_config', $config['wysiwyg']);
-        
+
         $securitymap = array();
         foreach($config['types'] as $key => $type){
             $securitymap[$key] = $type['security'];
         }
-        $container->setParameter('ibrows_simple_cms.securitymap',  $securitymap);   
-               
+        $container->setParameter('ibrows_simple_cms.securitymap',  $securitymap);
+
         $container->setDefinition('ibrows_simple_cms.content_manager', new \Symfony\Component\DependencyInjection\Definition(
             'Ibrows\SimpleCMSBundle\Model\ContentManager',
              array( new Reference('ibrows_simple_cms.entity_manager'),$config['types'])
         ))
         // ->setFactoryClass('%newsletter_factory.class%' )
         //->setFactoryMethod('get')
-        ;        
-        
+        ;
+
 
     }
 }

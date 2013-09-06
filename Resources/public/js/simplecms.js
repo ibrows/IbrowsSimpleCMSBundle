@@ -47,10 +47,15 @@ function simplecmsAjaxing(href, me){
             var modalstr = html;
             var modal = jQuery(modalstr).modal({backdrop: false, keyboard: true});
             
-            modal
-                .find('form.simplecms-html textarea')
-                .tinymce(simple_cms_wysiwyg_config)
-                ;
+            
+            var element = modal.find('form.simplecms-html textarea');
+            jQuery(document.body).trigger('ibrows.simplecms.modal.open', [element, this, replacmentid]);
+            jQuery(document.body).on('ibrows.simplecms.modal.open', function(event,element, context, replacmentid){
+                if(typeof element.tinymce == 'function'){
+                    element.tinymce(simple_cms_wysiwyg_config);
+                }
+            });
+           
             parent = this;
             modal.find('.btn-primary').bind('click', function() {
                 jQuery('.simplecms-dialog form').ajaxForm({

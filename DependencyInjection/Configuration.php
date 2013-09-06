@@ -18,10 +18,10 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        
+
         $node = $treeBuilder->root('ibrows_simple_cms');
-        
-                
+
+
         $this->addTemplateSection($node);
         $nodew = $node->children()->arrayNode('Wysiwyg');
         $this->addTemplateSectionWysiwyg($node);
@@ -29,20 +29,21 @@ class Configuration implements ConfigurationInterface
 
         return $treeBuilder;
     }
-    
+
     private function addTemplateSection(\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node)
     {
 
-        
+
         $node
             ->children()
-               
+
                 ->booleanNode('include_js_libs')->defaultTrue()->end()
+                ->booleanNode('include_tiny')->defaultTrue()->end()
                 ->booleanNode('include_js')->defaultTrue()->end()
                 ->booleanNode('include_css')->defaultTrue()->end()
                 ->scalarNode('upload_dir')->defaultValue('uploads/documents')->end()
                 ->booleanNode('localized_alias')->defaultTrue()->end()
-                ->scalarNode('role')->defaultValue('ROLE_IS_AUTHENTICATED_ANONYMOUSLY')->end()            
+                ->scalarNode('role')->defaultValue('ROLE_IS_AUTHENTICATED_ANONYMOUSLY')->end()
                 ->arrayNode('types')
                     ->useAttributeAsKey('id')
                     ->prototype('array')
@@ -52,17 +53,17 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('label')->defaultValue(null)->end()
                             ->scalarNode('type')->defaultValue(null)->end()
                             ->arrayNode('security')->addDefaultsIfNotSet()
-                                ->children() 
+                                ->children()
                                     ->scalarNode('general')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()
                                     ->scalarNode('show')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()
                                     ->scalarNode('create')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()
                                     ->scalarNode('edit')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()
                                     ->scalarNode('delete')->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')->end()
-                                ->end()    
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
-                    
+
                     ->defaultValue(array(
                         'text'=> array('class'=> 'Ibrows\SimpleCMSBundle\Entity\TextContent','type'=>'Ibrows\SimpleCMSBundle\Form\TextContentType','repository'=>null,'label'=>null,'security'=>array(
                             'general' => 'IS_AUTHENTICATED_ANONYMOUSLY','show' => 'IS_AUTHENTICATED_ANONYMOUSLY','create' => 'IS_AUTHENTICATED_ANONYMOUSLY','edit' => 'IS_AUTHENTICATED_ANONYMOUSLY','delete'=> 'IS_AUTHENTICATED_ANONYMOUSLY'
@@ -72,25 +73,25 @@ class Configuration implements ConfigurationInterface
                             )),
                         'file'=> array('class'=> 'Ibrows\SimpleCMSBundle\Entity\ImageContent','type'=>'Ibrows\SimpleCMSBundle\Form\FileContentType','repository'=>null,'label'=>null,'security'=>array(
                             'general' => 'IS_AUTHENTICATED_ANONYMOUSLY','show' => 'IS_AUTHENTICATED_ANONYMOUSLY','create' => 'IS_AUTHENTICATED_ANONYMOUSLY','edit' => 'IS_AUTHENTICATED_ANONYMOUSLY','delete'=> 'IS_AUTHENTICATED_ANONYMOUSLY'
-                            )),                        
+                            )),
                         'metatags'=> array('class'=> 'Ibrows\SimpleCMSBundle\Entity\MetaTagContent','type'=>'Ibrows\SimpleCMSBundle\Form\MetaTagContentType','repository'=>null,'label'=>null,'security'=>array(
                             'general' => 'IS_AUTHENTICATED_ANONYMOUSLY','show' => 'IS_AUTHENTICATED_ANONYMOUSLY','create' => 'IS_AUTHENTICATED_ANONYMOUSLY','edit' => 'IS_AUTHENTICATED_ANONYMOUSLY','delete'=> 'IS_AUTHENTICATED_ANONYMOUSLY'
-                            )),                              
+                            )),
                         ))
                 ->end()
-                        
+
             ->end()
         ->end();
 
     }
-    
-    
+
+
     public function addTemplateSectionWysiwyg(\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node)
     {
         $node
         ->children()->arrayNode('wysiwyg')->addDefaultsIfNotSet()
-            
-            ->children() 
+
+            ->children()
                 ->scalarNode('theme')->defaultValue('advanced')->end()
                 ->scalarNode('theme_advanced_buttons1')->defaultValue("save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect")->end()
                 ->scalarNode('theme_advanced_buttons2')->defaultValue("cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor")->end()
@@ -111,7 +112,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                
+
                 ->scalarNode('plugins')->defaultValue("autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist")->end()
 
                 ->scalarNode('mode')->defaultValue('exact')->end()
@@ -122,13 +123,13 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('apply_source_formatting')->defaultValue(true)->end()
                 ->booleanNode('force_br_newlines')->defaultValue(false)->end()
                 ->booleanNode('relative_urls')->defaultValue(true)->end()
-                
+
             ->end()
         ->end()->end();
 
-    }    
+    }
 /*sample
- * 
+ *
 			mode : "exact",
 			elements : "ajaxfilemanager",
 			theme : "advanced",
@@ -140,9 +141,9 @@ class Configuration implements ConfigurationInterface
 			theme_advanced_resize_horizontal : true,
 			apply_source_formatting : true,
 			force_br_newlines : true,
-			force_p_newlines : false,	
-			relative_urls : true 
- * 
+			force_p_newlines : false,
+			relative_urls : true
+ *
  * 			// General options
 			theme : "advanced",
 			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
@@ -171,5 +172,5 @@ class Configuration implements ConfigurationInterface
 				username : "Some User",
 				staffid : "991234"
 			}
- */    
+ */
 }
