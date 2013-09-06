@@ -109,15 +109,16 @@ form.simplecms-editform textarea{
 }
 
 
-.simplecms-jquery-dialog .ui-button-text{
+.simplecms-dialog .btn-primary{
     background:  url(images/save.png);
-    background-position: left;
+    background-position: center center;
     background-repeat: no-repeat;
-    padding-left: 30px;
+    min-width: 100px;
+    padding: 15px;
 }
 
 
-.simplecms-jquery-dialog .form-row{
+.simplecms-dialog .form-row{
     min-height: 50px;
     
 }
