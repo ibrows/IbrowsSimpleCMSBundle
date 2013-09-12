@@ -149,7 +149,17 @@ Additional configuration
             text: { class: Ibrows\SimpleCMSBundle\Entity\TextContent , type: Ibrows\SimpleCMSBundle\Form\TextContentType, security:{general: ROLE_ADMIN} }
             image: { class: Ibrows\SimpleCMSBundle\Entity\ImageContent, type: Ibrows\SimpleCMSBundle\Form\FileContentType, security:{general: ROLE_ADMIN, show: ROLE_SUPER_ADMIN, create: ROLE_SUPER_ADMIN , edit: ROLE_SUPER_ADMIN , delete: ROLE_SUPER_ADMIN  } }
 
-### Edit TinyMCE Options
+
+### Add Tiny4 with Events Example
+
+        jQuery(document.body).on('ibrows.simplecms.modal.open', function(event,element, context, replacmentid){
+            addtiny(element);
+        });
+        jQuery(document.body).on('ibrows.simplecms.modal.close', function(event,element, context, replacmentid){
+            tinyMCE.remove('.simplecms-editform textarea');
+        });
+
+### Edit TinyMCE3 Options
 
 
     # app/config/conf.yml
