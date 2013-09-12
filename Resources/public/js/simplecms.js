@@ -72,11 +72,13 @@ function simplecmsAjaxing(href, me){
                                 simplecmsloadBindInner('.'+source);
                             }
                         }
+                        jQuery(document.body).trigger('ibrows.simplecms.modal.close', [element, this, replacmentid]);
                         modal.hide();
                         modal.remove();
                     },
                     error: function(html){
                         alert('can\'t save');
+                        jQuery(document.body).trigger('ibrows.simplecms.modal.close', [element, this, replacmentid]);
                         modal.hide();
                         modal.remove();
                     }
