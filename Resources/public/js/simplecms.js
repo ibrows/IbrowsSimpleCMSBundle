@@ -50,11 +50,12 @@ function simplecmsAjaxing(href, me){
             
             var element = modal.find('form.simplecms-html textarea');
             jQuery(document.body).trigger('ibrows.simplecms.modal.open', [element, this, replacmentid]);
-         /*   jQuery(document.body).on('ibrows.simplecms.modal.open', function(event,element, context, replacmentid){
-                if(typeof element.tinymce == 'function'){
+            jQuery(document.body).on('ibrows.simplecms.modal.open', function(event,element, context, replacmentid){
+                //use tiny3
+                if(typeof simple_cms_wysiwyg_config == 'object'){
                     element.tinymce(simple_cms_wysiwyg_config);
                 }
-            });*/
+            });
            
             parent = this;
             modal.find('.btn-primary').bind('click', function() {

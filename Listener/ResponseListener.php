@@ -96,8 +96,9 @@ class ResponseListener {
     var ajaxfilemanagerurl = "%s";
 </script>
 HTML;
-
-        $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
+        if ($this->includeTiny === true) {
+            $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
+        }
         if ($this->includeJS === true) {
             $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
             $scripts .= '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
