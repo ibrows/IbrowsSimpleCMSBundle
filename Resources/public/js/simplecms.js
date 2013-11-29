@@ -65,6 +65,8 @@ function simplecmsAjaxing(href, me){
                         if(source != jQuery(data).prop('id') ){
                             alert('can\'t save: '+data);
                         }else{
+                            //skip js to avoid side effects
+                            data = data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'"js"');
                             jQuery('.'+source).html(jQuery(data).html());
                             if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
                                 simplecmsloadBind('.'+source+' div.simplecms-edit');  
