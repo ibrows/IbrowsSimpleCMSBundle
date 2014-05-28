@@ -118,22 +118,27 @@ class RouteLoader extends FileLoader
     public static function getPathinfo($newroutename)
     {
         $matches = array();
-        $result = preg_match('!' . self::ROUTE_BEGIN . '(.*)' . self::ROUTE_END . '(.*)!', $newroutename, $matches);
+        preg_match('!' . self::ROUTE_BEGIN . '(.*)' . self::ROUTE_END . '(.*)!', $newroutename, $matches);
         $pathinfo = array();
         $pathinfo['_route'] = $matches[1];
         $matches = explode('_', $matches[2]);
 
         $key = false;
         foreach ($matches as $value) {
-            if ($value != null && $value != '' && $value !== false ) {
+            if ($value !== null && $value !== false ) {
                 if (!$key) {
                     $key = self::unescape($value);
                 } else {
-                    $pathinfo[$key] = self::unescape($value);
+                    if($value === ''){
+                        $pathinfo[$key] = null;
+                    }else{
+                        $pathinfo[$key] = self::unescape($value);
+                    }
                     $key = false;
                 }
             }
         }
+
         return $pathinfo;
     }
 
