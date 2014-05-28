@@ -107,6 +107,14 @@ Install & setup the bundle
         type:     annotation
         prefix:   /scms  
 
+
+    # use the alias routing
+    IbrowsSimpleCMSBundleAlias:
+        resource: .
+        type:     ibrows_router
+        prefix:   /    
+
+
     ```
 
 4.  Generate Schema
