@@ -2,6 +2,7 @@
 
 namespace Ibrows\SimpleCMSBundle\Entity;
 
+use Ibrows\SimpleCMSBundle\Routing\AliasHandler;
 use Symfony\Component\Config\ConfigCache;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * @ORM\Table(name="scms_metatagscontent")
  * @ORM\Entity(repositoryClass="Ibrows\SimpleCMSBundle\Repository\MetaTagRepository")
  * @DoctrineAssert\UniqueEntity("alias")
+ * @ORM\HasLifecycleCallbacks
  */
 class MetaTagContent extends Content
 {
@@ -46,23 +48,18 @@ class MetaTagContent extends Content
 
     private function setPathinfo()
     {
-        $router = $this->params->get('router');
-        /* @var $router \Symfony\Component\Routing\Router  */ 
-        $info = \Ibrows\SimpleCMSBundle\Extension\TwigExtension::generatePathInfoFromMetaTagKey($this->getKeyword());
+        $aliashandler = $this->params->get('ibrows_simple_cms.routing.aliashandler');
+        /* @var $aliashandler AliasHandler */
+        $info = $aliashandler->getPathInfoFromMetaTagKey($this->getKeyword());
         $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($this->getKeyword());
+        $this->pathinfo['_locale']=$arr[0];
         // add locale routing info after controller
-        foreach($router->match($info) as $key => $value){
+        foreach($info as $key => $value){
             $this->pathinfo[$key] = $value;
-            if($key == '_controller'){
-                $this->pathinfo['_locale']=$arr[0];
-            }
         }
-        $route = $router->getRouteCollection()->get($this->pathinfo['_route']);
-        if($route){
-            $this->setRouteDefaults($route->getDefaults());
-        }
-        $this->resetRouterCache($router);
+        $this->setRouteDefaults($aliashandler->getDefaults($this->pathinfo['_route']));
     }
+
 
     public function setRouteDefaults(array $defaults){
         $this->pathinfo['__defaults'] = $defaults;
@@ -75,17 +72,6 @@ class MetaTagContent extends Content
         return array();
     }
 
-    private function resetRouterCache(\Symfony\Component\Routing\Router $router){
-        $cachedir = $router->getOption('cache_dir');
-        $cacheclass = $router->getOption('matcher_cache_class');
-        $cachedebug = $router->getOption('debug');
-        $cache = new ConfigCache($cachedir.'/'.$cacheclass.'.php',$cachedebug);
-        unlink($cache.'');
-        $cacheclass = $router->getOption('generator_cache_class');
-        $cache = new ConfigCache($cachedir.'/'.$cacheclass.'.php',$cachedebug);
-        unlink($cache.'');        
-    }
-    
     
     public function getAlias()
     {
