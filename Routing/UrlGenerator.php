@@ -26,34 +26,47 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
         //use the cached version with my name - do the standard request if its not work
         // dont generate assets                
         if (stripos($name, RouteLoader::ROUTE_BEGIN) !== 0 && stripos($name, '_assetic') !== 0) {
+            $mergedParams = array_replace($defaults, $this->context->getParameters(), $parameters);
+            $routeName = RouteLoader::getRouteName($name, $mergedParams );
             try {
-                $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $parameters, $defaults ));
-                return $this->generate( $route, $parameters, $referenceType );
-            } catch (RouteNotFoundException $e) {
-                try {
-                    $reqparams = array();
-                    foreach ($variables as $val) {
-                        if (array_key_exists($val, $parameters)) {
-                            $reqparams[$val] = $parameters[$val];
-                        }
-                    }
-                    $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams, $defaults));
-                    return $this->generate( $route, $parameters, $referenceType );
-                } catch (RouteNotFoundException $e) {
-                    try {
-                        $reqparams = array();
-                        foreach ($requirements as $key => $val) {
-                            if (array_key_exists($key, $parameters)) {
-                                $reqparams[$key] = $parameters[$key];
-                            }
-                        }
-                        $route = RouteLoader::getRouteName($name, array_merge($this->context->getParameters(), $reqparams, $defaults));
-                        return $this->generate( $route, $parameters, $referenceType );
-                    } catch (RouteNotFoundException $e) {
-                        // do nothing, go on and do the normal Request
-                    }
+                return $this->generate( $routeName, $parameters, $referenceType );
+            } catch (RouteNotFoundException $e) {}
+
+
+            //check route without unknown params
+            foreach ($mergedParams as $key => $val) {
+                if (!in_array($key,$variables)  && $key != '_controller') {
+                    unset($mergedParams[$key]);
                 }
             }
+            $routeName = RouteLoader::getRouteName($name, $mergedParams );
+            try {
+                return $this->generate( $routeName, $parameters, $referenceType );
+            } catch (RouteNotFoundException $e) {}
+
+            //check route without defaults
+            foreach ($mergedParams as $key => $val) {
+                if (array_key_exists($key,$defaults)  && $key != '_controller') {
+                    unset($mergedParams[$key]);
+                }
+            }
+            $routeName = RouteLoader::getRouteName($name, $mergedParams );
+            try {
+                return $this->generate( $routeName, $parameters, $referenceType );
+            } catch (RouteNotFoundException $e) {}
+
+            //check route with only requirements
+            foreach ($mergedParams as $key => $val) {
+                if (!array_key_exists($key,$requirements)  && $key != '_controller') {
+                    unset($mergedParams[$key]);
+                }
+            }
+            $routeName = RouteLoader::getRouteName($name, $mergedParams );
+            try {
+                return $this->generate( $routeName, $parameters, $referenceType );
+            } catch (RouteNotFoundException $e) {}
+
+
         }
 
 

@@ -66,6 +66,15 @@ class RouteLoader extends FileLoader
                 $pathinfo = unserialize($metatag['pathinfo']);
             }    
             $oldroute = $pathinfo['_route'];
+
+            //add defaults to routealias
+            if(isset($pathinfo['__defaults']) && is_array($pathinfo['__defaults'])){
+                foreach($pathinfo['__defaults'] as $key => $value){
+                    if(strpos($key,'_')!==0){
+                        $metatag['alias'].='-{'.$key.'}';
+                    }
+                }
+            }
             $route = new Route($metatag['alias'], $pathinfo, array(), array());
             $collection->add(self::getRouteName($oldroute, $pathinfo), $route);
         }
@@ -85,6 +94,9 @@ class RouteLoader extends FileLoader
         foreach ($parameters as $key => $value) {
             if(is_array($value)){
                 $return .= self::parameters2String($value);
+                continue;
+            }
+            if($value === null){
                 continue;
             }
             if (strpos($key, '_') !== 0 || ($key == '_locale' && self::$localizedAlias)) {

@@ -57,7 +57,22 @@ class MetaTagContent extends Content
                 $this->pathinfo['_locale']=$arr[0];
             }
         }
+        $route = $router->getRouteCollection()->get($this->pathinfo['_route']);
+        if($route){
+            $this->setRouteDefaults($route->getDefaults());
+        }
         $this->resetRouterCache($router);
+    }
+
+    public function setRouteDefaults(array $defaults){
+        $this->pathinfo['__defaults'] = $defaults;
+    }
+
+    public function getRouteDefaults(){
+        if(array_key_exists('__defaults',$this->pathinfo) && is_array($this->pathinfo['__defaults'])){
+            return $this->pathinfo['__defaults'];
+        }
+        return array();
     }
 
     private function resetRouterCache(\Symfony\Component\Routing\Router $router){
