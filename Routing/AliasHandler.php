@@ -94,6 +94,7 @@ class AliasHandler implements  EventSubscriber
     public function resetRouterCache()
     {
         if(!$this->router instanceof Router){
+
             return;
         }
         $cachedir = $this->router->getOption('cache_dir');
@@ -109,7 +110,7 @@ class AliasHandler implements  EventSubscriber
             unlink($cache->__toString());
         }
         // here i have to make sure, that cache not will be right with the old in memory routecollection
-        $this->router->setOption('cache_dir', false);
+        $this->router->setOption('cache_dir', null);
 
     }
 
