@@ -50,18 +50,28 @@ use Doctrine\ORM\Mapping as ORM;
     }
     
     public static function mailSpamProtect($html){
-            $replacment = '
-<script language="JavaScript" type="text/javascript">
+        $matches = array();
+        preg_match_all('!<a([^>])+mailto:([^\s<>"@]+)@([^\s<>"@]+)([^>]*)>([^<]+)</a>!', $html, $matches);
+
+        foreach($matches[0] as $i => $link) {
+            $hash = sha1($link);
+            $replace = <<<EOF
+            <span id="id_{$hash}"></span>
+<script type="text/javascript">
 <!--
-	var string1 = "\\2";
-	var string2 = "@";
-	var string3 = "\\3";
-	var string4 = string1 + string2 + string3;
-	document.write("<a href=" + "mail" + "to:" + string1 +
-		string2 + string3 + ">" + string4 + "</a>");
-//-->
+(function(){
+    var string1 = '{$matches[2][$i]}';
+    var string2 = '@';
+    var string3 = '{$matches[3][$i]}';
+    document.getElementById('id_{$hash}').innerHTML = '<a href=' + 'mail' + 'to:' + string1 + string2 + string3 + '>' + string1 + string2 + string3 + '</a>';
+})();
+-->
 </script>
-';
-            return preg_replace('!<a([^>])+mailto:([^\s<>"@]+)@([^\s<>"@]+)([^>]*)>([^<]+)</a>!', $replacment, $html);        
+EOF;
+            $html = str_replace($link, $replace, $html);
+
+        }
+
+        return $html;
     }
 }
