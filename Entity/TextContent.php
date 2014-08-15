@@ -3,6 +3,7 @@
 namespace Ibrows\SimpleCMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ibrows\SimpleCMSBundle\Entity\TextContent
@@ -17,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
      * @var string $text
      *
      * @ORM\Column(name="text", type="text")
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
      */
     protected $text;
 
