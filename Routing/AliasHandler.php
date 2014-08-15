@@ -65,9 +65,11 @@ class AliasHandler implements  EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        $events =  array(Events::postUpdate);
-        $events[] =  Events::postFlush;
-        return $events;
+        return array(
+            Events::postPersist,
+            Events::postUpdate,
+            Events::postFlush
+        );
     }
 
     public function postUpdate(LifecycleEventArgs $args){
@@ -94,12 +96,14 @@ class AliasHandler implements  EventSubscriber
     public function resetRouterCache()
     {
         if(!$this->router instanceof Router){
-
             return;
         }
         $cachedir = $this->router->getOption('cache_dir');
         $cacheclass = $this->router->getOption('matcher_cache_class');
         $cachedebug = $this->router->getOption('debug');
+
+        // here i have to make sure, that cache not will be right with the old in memory routecollection
+        $this->router->setOption('cache_dir', null);
         $cache = new ConfigCache($cachedir . '/' . $cacheclass . '.php', $cachedebug);
         if (file_exists($cache->__toString())) {
             unlink($cache->__toString());
@@ -109,10 +113,5 @@ class AliasHandler implements  EventSubscriber
         if (file_exists($cache->__toString())) {
             unlink($cache->__toString());
         }
-        // here i have to make sure, that cache not will be right with the old in memory routecollection
-        $this->router->setOption('cache_dir', null);
-
     }
-
-
 }
