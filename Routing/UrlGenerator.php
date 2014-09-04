@@ -26,12 +26,11 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
         //use the cached version with my name - do the standard request if its not work
         // dont generate assets                
         if (stripos($name, RouteLoader::ROUTE_BEGIN) !== 0 && stripos($name, '_assetic') !== 0) {
-            $mergedParams = array_replace($defaults, $this->context->getParameters(), $parameters);
+            $mergedParams = array_replace($this->context->getParameters(),$defaults, $parameters);
             $routeName = RouteLoader::getRouteName($name, $mergedParams );
             try {
                 return $this->generate( $routeName, $parameters, $referenceType );
             } catch (RouteNotFoundException $e) {}
-
 
             //check route without unknown params
             foreach ($mergedParams as $key => $val) {
