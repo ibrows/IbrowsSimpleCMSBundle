@@ -34,7 +34,7 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
 
             //check route without unknown params
             foreach ($mergedParams as $key => $val) {
-                if (!in_array($key,$variables)  && $key != '_controller') {
+                if (!in_array($key,$variables)  && $key != '_controller'  && $key != '_locale') {
                     unset($mergedParams[$key]);
                 }
             }
@@ -45,7 +45,7 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
 
             //check route without defaults
             foreach ($mergedParams as $key => $val) {
-                if (array_key_exists($key,$defaults)  && $key != '_controller') {
+                if (array_key_exists($key,$defaults)  && $key != '_controller'  && $key != '_locale') {
                     unset($mergedParams[$key]);
                 }
             }
@@ -56,10 +56,17 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
 
             //check route with only requirements
             foreach ($mergedParams as $key => $val) {
-                if (!array_key_exists($key,$requirements)  && $key != '_controller') {
+                if (!array_key_exists($key,$requirements)  && $key != '_controller'  && $key != '_locale') {
                     unset($mergedParams[$key]);
                 }
             }
+            $routeName = RouteLoader::getRouteName($name, $mergedParams );
+            try {
+                return $this->generate( $routeName, $parameters, $referenceType );
+            } catch (RouteNotFoundException $e) {}
+
+            //check route without locale
+            unset($mergedParams['_locale']);
             $routeName = RouteLoader::getRouteName($name, $mergedParams );
             try {
                 return $this->generate( $routeName, $parameters, $referenceType );
