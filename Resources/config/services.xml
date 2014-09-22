@@ -41,10 +41,11 @@
             <argument type="service" id="router" />
             <argument>%ibrows_simple_cms.include_js%</argument> 
             <argument>%ibrows_simple_cms.include_css%</argument> 
-            <argument>%ibrows_simple_cms.include_js_libs%</argument>             
+            <argument>%ibrows_simple_cms.include_js_libs%</argument>
+            <argument>%ibrows_simple_cms.include_tiny%</argument>
             <argument>%ibrows_simple_cms.wysiwyg_config%</argument> 
             <tag name="kernel.event_listener" event="kernel.response" />
-        </service>        
+        </service> 
         
         <service id="ibrows_simple_cms.securityhandler" class="Ibrows\SimpleCMSBundle\Security\SecurityHandler">
             <argument type="service" id="service_container" />
