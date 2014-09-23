@@ -16,11 +16,11 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
 {
     const GENERATE_NORMAL_ROUTE = '!!!';
 
-    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens)
+    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens, array $requiredSchemes = array())
     {
         if(array_key_exists(self::GENERATE_NORMAL_ROUTE, $parameters) ){
             unset($parameters[self::GENERATE_NORMAL_ROUTE]);
-            return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens);
+            return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens,$requiredSchemes);
         }
 
         //use the cached version with my name - do the standard request if its not work
@@ -76,7 +76,7 @@ class UrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
         }
 
 
-        return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens);
+        return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens,$requiredSchemes);
     }
 
 }
