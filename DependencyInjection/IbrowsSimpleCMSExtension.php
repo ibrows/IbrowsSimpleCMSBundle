@@ -3,6 +3,7 @@
 namespace Ibrows\SimpleCMSBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader as Loader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +16,7 @@ use Symfony\Component\Config\FileLocator;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class IbrowsSimpleCMSExtension extends Extension
+class IbrowsSimpleCMSExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -48,10 +49,25 @@ class IbrowsSimpleCMSExtension extends Extension
             'Ibrows\SimpleCMSBundle\Model\ContentManager',
              array( new Reference('ibrows_simple_cms.entity_manager'),$config['types'])
         ))
+
         // ->setFactoryClass('%newsletter_factory.class%' )
         //->setFactoryMethod('get')
         ;
 
+    }
 
+    public function prepend(ContainerBuilder $container)
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if (!isset($bundles['IbrowsSimpleSeoBundle'])) {
+            return;
+        }
+
+        $configs = $container->getExtensionConfig($this->getAlias());
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        $configSeo = array('localized_alias' => $config['localized_alias']);
+        $configSeo['entity_class'] = $config['types']['metatags']['class'];
+        $container->prependExtensionConfig('ibrows_simple_seo', $configSeo);
     }
 }

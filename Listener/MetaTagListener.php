@@ -2,14 +2,14 @@
 
 namespace Ibrows\SimpleCMSBundle\Listener;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Ibrows\SimpleCMSBundle\Extension\TwigExtension;
+use Ibrows\SimpleSeoBundle\Extension\TwigExtension as SeoTwigExtension ;
+use Ibrows\SimpleSeoBundle\Routing\KeyGenerator  as SeoKeyGenerator;
+use Ibrows\SimpleSeoBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\templating\Helper\CoreAssetsHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Ibrows\SimpleCMSBundle\Security\SecurityHandler;
-use Ibrows\SimpleCMSBundle\Extension\TwigExtension;
 
 class MetaTagListener
 {
@@ -18,6 +18,7 @@ class MetaTagListener
     private $router;
     private $securityHandler;
     private $translator;
+    private $keyGenerator;
 
     public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
     {
@@ -25,6 +26,7 @@ class MetaTagListener
         $this->assetHelper = $assetHelper;
         $this->router = $router;
         $this->securityHandler = $securityHandler;
+        $this->keyGenerator = new SeoKeyGenerator();
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
@@ -48,11 +50,12 @@ class MetaTagListener
         if ($pos === false) {
             return false;
         }
-        if (strripos($content, TwigExtension::initMetaTagString()) === false) {
+        if (strripos($content, SeoTwigExtension::initMetaTagString()) === false) {
             return false;
         }
 
-        $key = TwigExtension::generateMetaTagKey($request,$this->router, $this->translator->getLocale());
+
+        $key = $this->keyGenerator->generateMetaTagKey($request,$this->router, $this->translator->getLocale());
         $label = "edit metatags of " . $key;
         $editbox = TwigExtension::wrapOutputEdit(
                         $this->router, $label, $key, 'metatags', array('output' => $label)

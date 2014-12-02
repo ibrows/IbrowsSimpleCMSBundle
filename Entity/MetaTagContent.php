@@ -2,27 +2,24 @@
 
 namespace Ibrows\SimpleCMSBundle\Entity;
 
-use Ibrows\SimpleCMSBundle\Routing\AliasHandler;
-use Symfony\Component\Config\ConfigCache;
-
 use Doctrine\ORM\Mapping as ORM;
+use Ibrows\SimpleSeoBundle\Model\ContentInterface as SeoContentInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * Ibrows\SimpleCMSBundle\Entity\TextContent
- * 
+ *
  * @ORM\Table(name="scms_metatagscontent")
- * @ORM\Entity(repositoryClass="Ibrows\SimpleCMSBundle\Repository\MetaTagRepository")
+ * @ORM\Entity()
  * @DoctrineAssert\UniqueEntity("alias")
- * @ORM\HasLifecycleCallbacks
  */
-class MetaTagContent extends Content
+class MetaTagContent extends Content implements SeoContentInterface
 {
 
     /**
      * @var $metatags
      * @ORM\Column(type="array")
-     * 
+     *
      */
     protected $metatags;
     static $preventvars = array('title', 'keywords', 'description');
@@ -37,42 +34,28 @@ class MetaTagContent extends Content
     /**
      * @var $pathinfo
      * @ORM\Column(type="array")
-     * 
+     *
      */
     protected $pathinfo;
 
-    public function getPathinfo()
+
+    protected $changedPathInfo = false;
+
+
+    public function setRouteDefaults(array $defaults)
     {
-        return $this->pathinfo;
-    }
-
-    private function setPathinfo()
-    {
-        $aliashandler = $this->params->get('ibrows_simple_cms.routing.aliashandler');
-        /* @var $aliashandler AliasHandler */
-        $info = $aliashandler->getPathInfoFromMetaTagKey($this->getKeyword());
-        $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($this->getKeyword());
-        $this->pathinfo['_locale']=$arr[0];
-        // add locale routing info after controller
-        foreach($info as $key => $value){
-            $this->pathinfo[$key] = $value;
-        }
-        $this->setRouteDefaults($aliashandler->getDefaults($this->pathinfo['_route']));
-    }
-
-
-    public function setRouteDefaults(array $defaults){
         $this->pathinfo['__defaults'] = $defaults;
     }
 
-    public function getRouteDefaults(){
-        if(array_key_exists('__defaults',$this->pathinfo) && is_array($this->pathinfo['__defaults'])){
+    public function getRouteDefaults()
+    {
+        if (array_key_exists('__defaults', $this->pathinfo) && is_array($this->pathinfo['__defaults'])) {
             return $this->pathinfo['__defaults'];
         }
         return array();
     }
 
-    
+
     public function getAlias()
     {
         return $this->alias;
@@ -80,14 +63,14 @@ class MetaTagContent extends Content
 
     public function setAlias($alias)
     {
-        if($alias == $this->alias){
+        if ($alias == $this->alias) {
             //nothing changed
             return;
         }
-        
-        if(empty($alias)){
-            $this->alias = NULL;
-        }else{
+
+        if (empty($alias)) {
+            $this->alias = null;
+        } else {
             $this->alias = $alias;
         }
         $this->setPathinfo();
@@ -99,7 +82,7 @@ class MetaTagContent extends Content
         if (is_array($this->metatags)) {
             foreach ($this->metatags as $key => $val) {
                 if (!in_array($key, self::$preventvars)) {
-                    $return.= "$key=$val\n";
+                    $return .= "$key=$val\n";
                 }
             }
         }
@@ -181,18 +164,17 @@ class MetaTagContent extends Content
                 $tag = $tag . ' ' . $args[$key];
             }
             if ($key == 'title') {
-                $metatagoutput .=$args['pre'] . "<title>" . $filter->filterHtml($tag) . "</title>";
+                $metatagoutput .= $args['pre'] . "<title>" . $filter->filterHtml($tag) . "</title>";
                 continue;
             }
             $metatagoutput .= $args['pre'] . self::createMetaTag($filter->filterHtml($key), $filter->filterHtml($tag));
         }
 
 
-        return $metatagoutput;
-        ;
+        return $metatagoutput;;
     }
 
-    static public function createMetaTag($name, $content, $extras=array())
+    static public function createMetaTag($name, $content, $extras = array())
     {
         $metastring = '';
         $metastring .= '<meta name="' . $name . '"';
@@ -202,5 +184,46 @@ class MetaTagContent extends Content
         $metastring .= ' content="' . $content . '" />';
         return $metastring;
     }
+
+
+    public function getPathinfo()
+    {
+        return $this->pathinfo;
+    }
+
+    private function setPathinfo()
+    {
+        $this->changedPathInfo = true;
+    }
+
+    public function setChangedPathInfo(array $pathInfo)
+    {
+        $this->pathinfo = $pathInfo;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isChangedPathInfo()
+    {
+        return $this->changedPathInfo;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetaTagArray()
+    {
+        if (!is_array($this->metatags)) {
+            return array();
+        }
+        return $this->metatags;
+    }
+
+    public function getHtmlRenderServiceId()
+    {
+        return 'ibrows_simple_seo.meta_tag_renderer';
+    }
+
 
 }

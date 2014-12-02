@@ -70,7 +70,6 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms_collection' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
-            'scms_metatags' => new \Twig_Filter_Method($this, 'metaTags', array('is_safe' => array('html'))),
         );
     }
 
@@ -81,101 +80,9 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
             'scms_collection' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scmsc' => new \Twig_Function_Method($this, 'contentCollection', array('is_safe' => array('html'))),
             'scms_iseditmode' => new \Twig_Function_Method($this, 'isGranted', array('is_safe' => array('html'))),
-            'scms_metatags' => new \Twig_Function_Method($this, 'metaTags', array('is_safe' => array('html'))),
-            'scms_metatag' => new \Twig_Function_Method($this, 'metaTag', array('is_safe' => array('html'))),
         );
     }
-    
-    public function metaTag($tagname = 'title')
-    {
-        $locale = $this->translator->getLocale();
-        $currentlang = substr($locale, 0, 2);
-        if (!isset($arguments['pre'])) {
-            $arguments['pre'] = sprintf("\n%8s", ' ');
-        }
-        $key = self::generateMetaTagKey($this->container->get('request'),$this->container->get('router'), $locale);
-        $obj = $this->manager->find('metatags', $key, $locale);
-        if ($obj) {
-            /* @var $obj \Ibrows\SimpleCMSBundle\Entity\MetaTagContent   */
-            return $obj->getMetatag($tagname);
-        }
-        return null;
-    }
-    
 
-    public function metaTags($defaults=true, array $arguments = array())
-    {
-        $locale = $this->translator->getLocale();
-        $currentlang = substr($locale, 0, 2);
-        if (!isset($arguments['pre'])) {
-            $arguments['pre'] = sprintf("\n%8s", ' ');
-        }
-
-
-        $headers = self::initMetaTagString();
-        if ($defaults) {
-            $headers .= $arguments['pre'] . '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-            $headers .= $arguments['pre'] . '<meta http-equiv="content-language" content="' . $currentlang . '" />';
-            $headers .= $arguments['pre'] . \Ibrows\SimpleCMSBundle\Entity\MetaTagContent::createMetaTag('DC.language', $currentlang, array('scheme' => "RFC3066"));
-        }
-        $key = self::generateMetaTagKey($this->container->get('request'),$this->container->get('router'), $locale);
-        $obj = $this->manager->find('metatags', $key, $locale);
-        if ($obj) {
-            $headers .= $obj->toHTML($this, $arguments);
-        }
-        return $headers;
-    }
-
-    public static function initMetaTagString()
-    {
-        return "<!--scms-metatags-->";
-    }
-
-    public static function generatePathInfoFromMetaTagKey($key)
-    {
-        $arr = \Ibrows\SimpleCMSBundle\Model\ContentManager::splitLocaledKeyword($key);
-        $key = str_replace('_', '/', $arr[1]);
-        $key = str_replace('-00-', '_', $key);
-        return $key;
-    }
-
-    public static function generateMetaTagKeyFromPathInfo($pathinfo, $locale)
-    {
-
-        $key = str_replace('_', '-00-', $pathinfo); // replace / replacement
-        $key = str_replace('/', '_', $key); //replace /
-        $key = \Ibrows\SimpleCMSBundle\Model\ContentManager::generateLocaledKeyword($key, $locale);
-        return $key;
-    }
-
-    public static function generateMetaTagKey(\Symfony\Component\HttpFoundation\Request $request, $router, $locale)
-    {
-        
-        $pathinfo = $request->getPathInfo();
-        
-        try{
-            $infos = $router->match($pathinfo);
-        }catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException $e){
-            $infos = false;
-        }catch (\Symfony\Component\Routing\Exception\MethodNotAllowedException $e){
-            $infos = false;
-        }
-     
-        if ($infos !== false && strpos($infos['_route'], \Ibrows\SimpleCMSBundle\Routing\RouteLoader::ROUTE_BEGIN) === 0) {
-            
-            // allready alias, get the base pathinfo
-            $oldinfos = \Ibrows\SimpleCMSBundle\Routing\RouteLoader::getPathinfo($infos['_route']);
-            $oldroute = $oldinfos['_route'];
-            unset($oldinfos['_route']);
-            $oldinfos[\Ibrows\SimpleCMSBundle\Routing\UrlGenerator::GENERATE_NORMAL_ROUTE] = true;
-            $pathinfo = $router->generate($oldroute, $oldinfos);
-            $pathinfo = str_replace('/app_dev.php', '', $pathinfo);
-            $pathinfo = preg_replace('!([^?]*)(\?_locale=[^&]*)!', '$1',  $pathinfo);
-        }
-        
-
-        return self::generateMetaTagKeyFromPathInfo($pathinfo, $locale);
-    }
 
     public static function wrapOutputEdit(\Symfony\Component\Routing\RouterInterface $router, $out, $key, $type, array $arguments = array(), $default='')
     {

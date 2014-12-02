@@ -55,27 +55,13 @@
             <argument>%ibrows_simple_cms.securitymap%</argument> 
             
         </service>      
-        
+
          <service id="ibrows_simple_cms.metatag_listener" class="Ibrows\SimpleCMSBundle\Listener\MetaTagListener" scope="request">
             <argument type="service" id="templating.helper.assets" />
             <argument type="service" id="ibrows_simple_cms.securityhandler" />
             <argument type="service" id="router" />
             <argument type="service" id="translator" />
             <tag name="kernel.event_listener" event="kernel.response" />
-        </service>       
-        
-        <service id="ibrows_simple_cms.routing.loader" class="Ibrows\SimpleCMSBundle\Routing\RouteLoader">
-            <argument type="service" id="ibrows_simple_cms.content_manager" />      
-            <argument type="service" id="router" />
-            <call method="setLocalizedAlias">
-                <argument>%ibrows_simple_cms.localized_alias%</argument>
-            </call>              
-            <tag name="routing.loader" />
-            
-        </service>           
-        <service id="ibrows_simple_cms.routing.aliashandler" class="Ibrows\SimpleCMSBundle\Routing\AliasHandler">
-            <argument type="service" id="router" />
-            <tag name="doctrine.event_subscriber"/>
         </service>
     </services>
 </container>
