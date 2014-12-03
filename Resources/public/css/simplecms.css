@@ -84,27 +84,35 @@ div.simplecms-edit-collection div.simplecms-edit.active{
 
 
 
-form.simplecms-editform{
-    min-width: 400px;    
-    min-height: 200px;    
-}
-form.simplecms-editform label{
-    min-width: 100px;
-    display: block;
-    float: left;
-    text-align: left;
-}
-form.simplecms-editform input{
-    min-width: 300px;
-    display: block;
-    float: right;    
-    text-align: left;
-}
-form.simplecms-editform textarea{
+form.simplecms-editform {
     min-width: 400px;
-    min-height: 180px;
+    min-height: 200px;
+}
+
+form.simplecms-editform label {
+    width: 100%;
     display: block;
     text-align: left;
+    margin: 0;
+}
+
+form.simplecms-editform input,
+form.simplecms-editform select,
+form.simplecms-editform textarea {
+    width: 100%;
+    display: block;
+    text-align: left;
+    height: auto;
+    margin: 0 0 10px 0;
+    padding: 10px;
+}
+
+form.simplecms-editform select {
+    padding: 0;
+}
+
+form.simplecms-editform textarea {
+    min-height: 180px;
     resize: auto;
 }
 
