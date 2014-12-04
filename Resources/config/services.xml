@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <!--
     <parameters>
@@ -17,51 +17,54 @@
         </service>
     </services>
     -->
-     <parameters>
+    <parameters>
         <parameter key="ibrows_simple_cms.include_libs">true</parameter>
-    </parameters>    
+    </parameters>
     <services>
         <service id="ibrows_simple_cms.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
 
-        </service>    
+        </service>
         <service id="ibrows_simple_cms.twig_extension" class="Ibrows\SimpleCMSBundle\Extension\TwigExtension">
-            <tag name="twig.extension"/>            
-            <argument type="service" id="ibrows_simple_cms.content_manager" />  
-            <argument type="service" id="translator" />
-            <argument type="service" id="router" />
-            <argument type="service" id="service_container" />
+            <tag name="twig.extension"/>
+            <argument type="service" id="ibrows_simple_cms.content_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="service_container"/>
             <call method="setSecurityHandler">
-                <argument type="service" id="ibrows_simple_cms.securityhandler" />
-            </call>              
-        </service>    
+                <argument type="service" id="ibrows_simple_cms.securityhandler"/>
+            </call>
+        </service>
 
         <service id="ibrows_simple_cms.response_listener" class="Ibrows\SimpleCMSBundle\Listener\ResponseListener" scope="request">
-            <argument type="service" id="templating.helper.assets" />
-            <argument type="service" id="ibrows_simple_cms.securityhandler" />
-            <argument type="service" id="router" />
-            <argument>%ibrows_simple_cms.include_js%</argument> 
-            <argument>%ibrows_simple_cms.include_css%</argument> 
+            <argument type="service" id="templating.helper.assets"/>
+            <argument type="service" id="ibrows_simple_cms.securityhandler"/>
+            <argument type="service" id="router"/>
+            <argument>%ibrows_simple_cms.include_js%</argument>
+            <argument>%ibrows_simple_cms.include_css%</argument>
             <argument>%ibrows_simple_cms.include_js_libs%</argument>
             <argument>%ibrows_simple_cms.include_tiny%</argument>
-            <argument>%ibrows_simple_cms.wysiwyg_config%</argument> 
-            <tag name="kernel.event_listener" event="kernel.response" />
-        </service> 
-        
-        <service id="ibrows_simple_cms.securityhandler" class="Ibrows\SimpleCMSBundle\Security\SecurityHandler">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="security.firewall.map" />
-            <argument type="service" id="security.context"/>
-            <argument>%ibrows_simple_cms.global_role%</argument> 
-            <argument>%ibrows_simple_cms.securitymap%</argument> 
-            
-        </service>      
+            <argument>%ibrows_simple_cms.wysiwyg_config%</argument>
+            <tag name="kernel.event_listener" event="kernel.response"/>
+        </service>
 
-         <service id="ibrows_simple_cms.metatag_listener" class="Ibrows\SimpleCMSBundle\Listener\MetaTagListener" scope="request">
-            <argument type="service" id="templating.helper.assets" />
-            <argument type="service" id="ibrows_simple_cms.securityhandler" />
-            <argument type="service" id="router" />
-            <argument type="service" id="translator" />
-            <tag name="kernel.event_listener" event="kernel.response" />
+        <service id="ibrows_simple_cms.securityhandler" class="Ibrows\SimpleCMSBundle\Security\SecurityHandler">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="security.firewall.map"/>
+            <argument type="service" id="security.context"/>
+            <argument>%ibrows_simple_cms.global_role%</argument>
+            <argument>%ibrows_simple_cms.securitymap%</argument>
+
+        </service>
+
+        <service id="ibrows_simple_cms.metatag_listener" class="Ibrows\SimpleCMSBundle\Listener\MetaTagListener" scope="request">
+            <argument type="service" id="templating.helper.assets"/>
+            <argument type="service" id="ibrows_simple_cms.securityhandler"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="translator"/>
+            <call method="setKeyGenerator">
+                <argument type="service" id="ibrows_simple_seo.key_generator"/>
+            </call>
+            <tag name="kernel.event_listener" event="kernel.response"/>
         </service>
     </services>
 </container>

@@ -29,6 +29,24 @@ class MetaTagListener
         $this->keyGenerator = new SeoKeyGenerator();
     }
 
+    /**
+     * @return SeoKeyGenerator
+     */
+    public function getKeyGenerator()
+    {
+        return $this->keyGenerator;
+    }
+
+    /**
+     * @param SeoKeyGenerator $keyGenerator
+     */
+    public function setKeyGenerator($keyGenerator)
+    {
+        $this->keyGenerator = $keyGenerator;
+    }
+
+
+
     public function onKernelResponse(FilterResponseEvent $event)
     {
 
