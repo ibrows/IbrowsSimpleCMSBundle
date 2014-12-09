@@ -67,6 +67,8 @@ function simplecmsAjaxing(href, me){
                         }else{
                             //skip js to avoid side effects
                             data = data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'"js"');
+                            //escape sourcestring
+                            source = source.replace(/(\\*[?])/g, "\\$1");
                             jQuery('.'+source).html(jQuery(data).html());
                             if(jQuery('#'+source).hasClass('simplecms-edit-collection')){
                                 simplecmsloadBind('.'+source+' div.simplecms-edit');  
