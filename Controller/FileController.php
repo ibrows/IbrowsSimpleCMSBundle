@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * FileController
@@ -171,7 +172,10 @@ class FileController extends Controller
      */    
     function allAction($type){
         $conf = $this->config();
-        
+        $manager = $this->container->get('ibrows_simple_cms.content_manager');
+        if(!$manager->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         return $this->render('IbrowsSimpleCMSBundle:File:'.$type.'', $conf);
     }
     

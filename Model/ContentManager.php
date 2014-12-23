@@ -45,6 +45,9 @@ class ContentManager
 
     public function getClass($type='text')
     {
+        if(!array_key_exists($type,$this->items)){
+            throw new \Exception("Type '$type' not found, try: " . implode(',', array_keys($this->items)));
+        }
         return $this->items[$type]->getClass();
     }
 
@@ -61,7 +64,7 @@ class ContentManager
 
     public function getRepository($type='text')
     {
-        if (!key_exists($type, $this->items)) {
+        if (!array_key_exists($type, $this->items)) {
             throw new \Exception("Type '$type' not found, try: " . implode(',', array_keys($this->items)));
         }
         return $this->items[$type]->getRepository();
@@ -96,6 +99,14 @@ class ContentManager
         $obj->setKeyword($key);
         self::setLocale($obj, $locale);
         return $obj;
+    }
+
+    /**
+     * @param $type
+     * @return bool
+     */
+    public function hasType($type){
+        return (array_key_exists($type, $this->items));
     }
 
     /**

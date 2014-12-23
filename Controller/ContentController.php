@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ibrows\SimpleCMSBundle\Entity\TextContent;
 use Ibrows\SimpleCMSBundle\Form\TextContentType;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Content controller.
@@ -39,6 +40,9 @@ class ContentController extends Controller
 
         $entities = null;
         if ($type != null) {
+            if(!$this->getManager()->hasType($type)){
+                throw new HttpException(404,"$type don't exists");
+            }
             $entities = $this->getManager()->getRepository($type)->findAll();
         }
         return array('entities' => $entities, 'type' => $type, 'types' => $this->getManager()->getContentModelItems());
@@ -52,6 +56,9 @@ class ContentController extends Controller
      */
     public function showAction($id, $type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_show', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_show not allowed');
 
@@ -76,6 +83,9 @@ class ContentController extends Controller
      */
     public function newAction($type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_new', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_new not allowed');
         $entity = $this->getManager()->create($type);
@@ -96,6 +106,9 @@ class ContentController extends Controller
      */
     public function createAction($type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_create', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_create not allowed');
         $entity = $this->getManager()->getEntity($type);
@@ -126,6 +139,9 @@ class ContentController extends Controller
      */
     public function editAction($id, $type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_edit', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_edit not allowed');
         $em = $this->getDoctrine()->getManager();
@@ -155,6 +171,9 @@ class ContentController extends Controller
      */
     public function updateAction($id, $type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_update', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_update not allowed');
         $em = $this->getDoctrine()->getManager();
@@ -218,6 +237,9 @@ class ContentController extends Controller
      */
     public function deleteByKeyAction($key, $type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_delete_key', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_delete_key not allowed');
         $entity = $this->getManager()->find($type, $key);
@@ -243,7 +265,9 @@ class ContentController extends Controller
      */
     public function editByKeyAction($key, $type)
     {
-
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         $entity = $this->getManager()->find($type, $key);
 
         $additional = $this->getRequest()->getQueryString();
@@ -284,6 +308,9 @@ class ContentController extends Controller
      */
     public function deleteAction($id, $type)
     {
+        if(!$this->getManager()->hasType($type)){
+            throw new HttpException(404,"$type don't exists");
+        }
         if (!$this->container->get('ibrows_simple_cms.securityhandler')->isGranted('ibrows_simple_cms_content_delete', array('type' => $type)))
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('ibrows_simple_cms_content_delete not allowed');
         $form = $this->createDeleteForm($id, $type);
