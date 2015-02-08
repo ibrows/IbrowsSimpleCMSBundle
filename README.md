@@ -210,7 +210,7 @@ TODO
 AUTHORS
 ----
  
- Developed at iBROWS GmbH Zurich: 
+ Developed at iBROWS AG Zurich: 
  Marc Steiner
  Dominik Zogg
  Olivier Kofler
