@@ -7,7 +7,7 @@ use Ibrows\SimpleSeoBundle\Extension\TwigExtension as SeoTwigExtension ;
 use Ibrows\SimpleSeoBundle\Routing\KeyGenerator  as SeoKeyGenerator;
 use Ibrows\SimpleSeoBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\templating\Helper\CoreAssetsHelper;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Ibrows\SimpleCMSBundle\Security\SecurityHandler;
 
@@ -20,7 +20,7 @@ class MetaTagListener
     private $translator;
     private $keyGenerator;
 
-    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
+    public function __construct(AssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
     {
         $this->translator = $translator;
         $this->assetHelper = $assetHelper;

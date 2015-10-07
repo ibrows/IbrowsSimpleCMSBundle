@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\templating\Helper\CoreAssetsHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Ibrows\SimpleCMSBundle\Security\SecurityHandler;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
 class ResponseListener {
 
@@ -21,7 +21,7 @@ class ResponseListener {
     private $securityHandler;
     private $wysiwygconfig;
 
-    public function __construct(CoreAssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, $includeJS = true, $includeCSS = true, $includeLibs = true,  $includeTiny = true,array $wysiwygconfig = array()) {
+    public function __construct(AssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, $includeJS = true, $includeCSS = true, $includeLibs = true,  $includeTiny = true,array $wysiwygconfig = array()) {
         $this->assetHelper = $assetHelper;
         $this->router = $router;
         $this->includeLibs = $includeLibs;
