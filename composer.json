@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "!=2.3.9,~2.2,^3.0",
+        "symfony/framework-bundle": "~2.2|^3.0",
         "ibrows/simple-seo-bundle": "~1.2"
     },
     "suggest": {
