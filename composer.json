@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/framework-bundle": "~2.2|^3.0",
-        "ibrows/simple-seo-bundle": "~1.2"
+        "ibrows/simple-seo-bundle": "dev-1.2.7-Symfony3.4"
     },
     "suggest": {
         "stfalcon/tinymce-bundle": ">=0.3"
