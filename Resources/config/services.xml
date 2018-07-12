@@ -21,8 +21,8 @@
         <parameter key="ibrows_simple_cms.include_libs">true</parameter>
     </parameters>
     <services>
-        <service id="ibrows_simple_cms.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
-
+        <service id="ibrows_simple_cms.entity_manager" class="Doctrine\ORM\EntityManager" public="false">
+            <factory service="doctrine" method="getManager"/>
         </service>
         <service id="ibrows_simple_cms.twig_extension" class="Ibrows\SimpleCMSBundle\Extension\TwigExtension">
             <tag name="twig.extension"/>
