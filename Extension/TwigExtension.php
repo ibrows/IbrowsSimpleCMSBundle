@@ -76,10 +76,10 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
     public function getFunctions()
     {
         return array(
-            'scms' => new \Twig_SimpleFilter($this, 'content', array('is_safe' => array('html'))),
-            'scms_collection' => new \Twig_SimpleFilter($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scmsc' => new \Twig_SimpleFilter($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scms_iseditmode' => new \Twig_SimpleFilter($this, 'isGranted', array('is_safe' => array('html'))),
+            'scms' => new \Twig_SimpleFunction($this, 'content', array('is_safe' => array('html'))),
+            'scms_collection' => new \Twig_SimpleFunction($this, 'contentCollection', array('is_safe' => array('html'))),
+            'scmsc' => new \Twig_SimpleFunction($this, 'contentCollection', array('is_safe' => array('html'))),
+            'scms_iseditmode' => new \Twig_SimpleFunction($this, 'isGranted', array('is_safe' => array('html'))),
         );
     }
 
