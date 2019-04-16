@@ -6,24 +6,24 @@ use Ibrows\SimpleCMSBundle\Extension\TwigExtension;
 use Ibrows\SimpleSeoBundle\Extension\TwigExtension as SeoTwigExtension ;
 use Ibrows\SimpleSeoBundle\Routing\KeyGenerator  as SeoKeyGenerator;
 use Ibrows\SimpleSeoBundle\Routing\UrlGenerator;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Ibrows\SimpleCMSBundle\Security\SecurityHandler;
 
 class MetaTagListener
 {
 
-    private $assetHelper;
+    private $packages;
     private $router;
     private $securityHandler;
     private $translator;
     private $keyGenerator;
 
-    public function __construct(AssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
+    public function __construct(Packages $packages, SecurityHandler $securityHandler, RouterInterface $router, \Symfony\Component\Translation\TranslatorInterface $translator)
     {
         $this->translator = $translator;
-        $this->assetHelper = $assetHelper;
+        $this->packages = $packages;
         $this->router = $router;
         $this->securityHandler = $securityHandler;
         $this->keyGenerator = new SeoKeyGenerator();

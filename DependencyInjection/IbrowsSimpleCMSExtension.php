@@ -67,7 +67,11 @@ class IbrowsSimpleCMSExtension extends Extension implements PrependExtensionInte
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         $configSeo = array('localized_alias' => $config['localized_alias']);
-        $configSeo['entity_class'] = $config['types']['metatags']['class'];
+
+        if (!empty($config['types']['metatags']['class'])) {
+            $configSeo['entity_class'] = $config['types']['metatags']['class'];
+        }
+
         $container->prependExtensionConfig('ibrows_simple_seo', $configSeo);
     }
 }

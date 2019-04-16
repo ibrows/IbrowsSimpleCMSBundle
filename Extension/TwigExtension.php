@@ -2,6 +2,9 @@
 
 namespace Ibrows\SimpleCMSBundle\Extension;
 
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
 class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\Helper\HtmlFilter
 {
 
@@ -65,22 +68,22 @@ class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\H
      */
     public function getFilters()
     {
-        return array(
-            'scms' => new \Twig_Filter_Method($this, 'content', array('is_safe' => array('html'))),
-            'scms_collection' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scmsc' => new \Twig_Filter_Method($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scms_iseditmode' => new \Twig_Filter_Method($this, 'isGranted', array('is_safe' => array('html'))),
-        );
+        return [
+            new TwigFilter('scms', [$this, 'content'], ['is_safe' => ['html']]),
+            new TwigFilter('scms_collection', [$this, 'contentCollection'], ['is_safe' => ['html']]),
+            new TwigFilter('scmsc', [$this, 'contentCollection'], ['is_safe' => ['html']]),
+            new TwigFilter('scms_iseditmode', [$this, 'isGranted'], ['is_safe' => ['html']]),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            'scms' => new \Twig_SimpleFunction($this, 'content', array('is_safe' => array('html'))),
-            'scms_collection' => new \Twig_SimpleFunction($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scmsc' => new \Twig_SimpleFunction($this, 'contentCollection', array('is_safe' => array('html'))),
-            'scms_iseditmode' => new \Twig_SimpleFunction($this, 'isGranted', array('is_safe' => array('html'))),
-        );
+        return [
+            new TwigFunction('scms', [$this, 'content'], ['is_safe' => ['html']]),
+            new TwigFunction('scms_collection', [$this, 'contentCollection'], ['is_safe' => ['html']]),
+            new TwigFunction('scmsc', [$this, 'contentCollection'], ['is_safe' => ['html']]),
+            new TwigFunction('scms_iseditmode', [$this, 'isGranted'], ['is_safe' => ['html']]),
+        ];
     }
 
 

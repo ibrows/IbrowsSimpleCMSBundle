@@ -2,17 +2,17 @@
 
 namespace Ibrows\SimpleCMSBundle\Listener;
 
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Ibrows\SimpleCMSBundle\Security\SecurityHandler;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
 class ResponseListener {
 
-    private $assetHelper;
+    private $packages;
     private $router;
     private $includeLibs;
     private $includeJS;
@@ -21,8 +21,8 @@ class ResponseListener {
     private $securityHandler;
     private $wysiwygconfig;
 
-    public function __construct(AssetsHelper $assetHelper, SecurityHandler $securityHandler, RouterInterface $router, $includeJS = true, $includeCSS = true, $includeLibs = true,  $includeTiny = true,array $wysiwygconfig = array()) {
-        $this->assetHelper = $assetHelper;
+    public function __construct(Packages $packages, SecurityHandler $securityHandler, RouterInterface $router, $includeJS = true, $includeCSS = true, $includeLibs = true,  $includeTiny = true,array $wysiwygconfig = array()) {
+        $this->packages = $packages;
         $this->router = $router;
         $this->includeLibs = $includeLibs;
         $this->includeJS = $includeJS;
@@ -79,7 +79,7 @@ class ResponseListener {
         if ($this->includeLibs === true) {
             foreach ($needed as $key => $value) {
                 if (preg_match("/$key\"/i",$content) === 0) {
-                    $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/' . $value);
+                    $url = $this->packages->getUrl('bundles/ibrowssimplecms/' . $value);
                     if (stripos($value, '.css')) {
                         $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
                     } else {
@@ -89,7 +89,7 @@ class ResponseListener {
             }
         }
 
-        $this->wysiwygconfig['script_url'] = $this->assetHelper->getUrl('bundles/ibrowssimplecms/' . 'js/tiny_mce/tiny_mce.js');
+        $this->wysiwygconfig['script_url'] = $this->packages->getUrl('bundles/ibrowssimplecms/' . 'js/tiny_mce/tiny_mce.js');
          $confscript= <<<HTML
 <script type="text/javascript">
     var simple_cms_wysiwyg_config = %s;
@@ -100,11 +100,11 @@ HTML;
             $scripts .= sprintf($confscript, json_encode( $this->wysiwygconfig ), $this->router->generate('ibrows_simple_cms_file_manager'));
         }
         if ($this->includeJS === true) {
-            $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
+            $url = $this->packages->getUrl('bundles/ibrowssimplecms/js/simplecms.js');
             $scripts .= '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
         }
         if ($this->includeCSS === true) {
-            $url = $this->assetHelper->getUrl('bundles/ibrowssimplecms/css/simplecms.css');
+            $url = $this->packages->getUrl('bundles/ibrowssimplecms/css/simplecms.css');
             $scripts .= ' <link rel="stylesheet" type="text/css" media="screen" href="' . $url . '" /> ';
         }
         $content = substr($content, 0, $pos) . $scripts . substr($content, $pos);

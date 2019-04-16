@@ -36,7 +36,7 @@
         </service>
 
         <service id="ibrows_simple_cms.response_listener" class="Ibrows\SimpleCMSBundle\Listener\ResponseListener">
-            <argument type="service" id="templating.helper.assets"/>
+            <argument type="service" id="assets.packages"/>
             <argument type="service" id="ibrows_simple_cms.securityhandler"/>
             <argument type="service" id="router"/>
             <argument>%ibrows_simple_cms.include_js%</argument>
@@ -50,14 +50,14 @@
         <service id="ibrows_simple_cms.securityhandler" class="Ibrows\SimpleCMSBundle\Security\SecurityHandler">
             <argument type="service" id="service_container"/>
             <argument type="service" id="security.firewall.map"/>
-            <argument type="service" id="security.context"/>
+            <argument type="service" id="security.authorization_checker"/>
             <argument>%ibrows_simple_cms.global_role%</argument>
             <argument>%ibrows_simple_cms.securitymap%</argument>
 
         </service>
 
         <service id="ibrows_simple_cms.metatag_listener" class="Ibrows\SimpleCMSBundle\Listener\MetaTagListener">
-            <argument type="service" id="templating.helper.assets"/>
+            <argument type="service" id="assets.packages"/>
             <argument type="service" id="ibrows_simple_cms.securityhandler"/>
             <argument type="service" id="router"/>
             <argument type="service" id="translator"/>

@@ -11,7 +11,7 @@
 
 namespace Ibrows\SimpleCMSBundle\Security;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Sonata\AdminBundle\Admin\AdminInterface;
 
@@ -40,14 +40,13 @@ class SecurityHandler {
     protected $globalRole;   
     
     /**
-     *
-     * @var SecurityContextInterface 
+     * @var AuthorizationCheckerInterface
      */
     protected $securityContext;
 
     public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container,
             \Symfony\Bundle\SecurityBundle\Security\FirewallMap $map,
-            SecurityContextInterface $securityContext,
+            AuthorizationCheckerInterface $securityContext,
             $globalRole, 
             array $securityMap ) {
         
