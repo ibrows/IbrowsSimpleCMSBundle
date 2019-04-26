@@ -2,10 +2,11 @@
 
 namespace Ibrows\SimpleCMSBundle\Extension;
 
+use Symfony\Bridge\Twig\Extension\InitRuntimeInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\Helper\HtmlFilter
+class TwigExtension extends \Twig_Extension implements \Ibrows\SimpleCMSBundle\Helper\HtmlFilter, InitRuntimeInterface
 {
 
     /**
